@@ -104,7 +104,7 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .active-visit .t { font-size: 12.5px; color: var(--gold); font-weight: 800; }
 .active-visit .p { font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 800; margin: 2px 0; }
 .active-visit .m { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; }
 .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
 .stat b { display: block; font-family: 'Cairo', sans-serif; font-size: 20px; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .stat b { color: var(--gold); } :root:not([data-theme="light"]) .btn-outline { color: var(--fg); border-color: var(--fg); } }
@@ -146,7 +146,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
 <p class="eyebrow">شركة الميدان · فريق البروموتر</p>
 <h1>تسجيل زيارات البروموتر</h1>
-<p class="sub">سجّل وصولك ومغادرتك لكل محل تزوره. التطبيق يرسل التسجيل لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
+<p class="sub">سجّل كل زيارة لمحل: اسم المحل والأجهزة المباعة. التطبيق يرسلها لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
 
 <div class="card">
   <h2><span class="step-num">1</span> بياناتك</h2>
@@ -169,19 +169,14 @@ select { background-position: 13px center, 18px center !important; padding-left:
 </div>
 
 <div class="card">
-  <h2><span class="step-num">2</span> الزيارة الحالية</h2>
-  <div class="active-visit" id="activeBox">
-    <div class="t">● أنت الآن بزيارة</div>
-    <div class="p" id="activePlace"></div>
-    <div class="m" id="activeMeta"></div>
-  </div>
+  <h2><span class="step-num">2</span> تسجيل زيارة</h2>
   <div id="arriveFields">
     <div class="field">
-      <label for="vPlace">اسم المحل أو الموقع</label>
+      <label for="vPlace">اسم المحل</label>
       <input type="text" id="vPlace" placeholder="مثال: محلات النور للموبايل" autocomplete="off">
     </div>
   </div>
-  <div class="sale-box" id="saleBox" style="margin-top:0;padding-top:0;border-top:none;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border);">
+  <div class="sale-box show" id="saleBox" style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--border);margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border);">
     <h3>🧾 الأجهزة المباعة بهذي الزيارة (Oukitel · Infinix · ZTE)</h3>
     <div class="row2">
       <div class="field">
@@ -211,8 +206,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
     <label for="vNote">ملاحظة (اختياري)</label>
     <textarea id="vNote" placeholder="مثال: رتبت العرض، ركبت بوستر C62، المحل يطلب 10 أجهزة"></textarea>
   </div>
-  <button class="btn btn-primary" id="arriveBtn" type="button"><span class="ic" aria-hidden="true">✅</span><span class="lb">تسجيل الوصول للمحل</span></button>
-  <button class="btn btn-gold hidden" id="leaveBtn" type="button"><span class="ic" aria-hidden="true">🚪</span><span class="lb">تسجيل المغادرة من المحل</span></button>
+  <button class="btn btn-whatsapp" id="sendBtn" type="button"><span aria-hidden="true">💬</span><span>إرسال الزيارة عبر واتساب</span></button>
   <div class="status" id="statusBox"></div>
 </div>
 
@@ -220,7 +214,6 @@ select { background-position: 13px center, 18px center !important; padding-left:
   <h2><span class="step-num">3</span> زيارات اليوم</h2>
   <div class="stats">
     <div class="stat"><b id="stStops">0</b><span>زيارة</span></div>
-    <div class="stat"><b id="stTime">0د</b><span>بالمحلات</span></div>
     <div class="stat"><b id="stSold">0</b><span>جهاز مباع</span></div>
   </div>
   <div id="stopList"><p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p></div>
@@ -257,7 +250,9 @@ select { background-position: 13px center, 18px center !important; padding-left:
   function fmtDate(t) { var d = new Date(t), days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; return days[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
   function fmtDur(ms) { var m = Math.max(0, Math.round(ms / 60000)); if (m < 60) return m + 'د'; return Math.floor(m / 60) + 'س ' + pad(m % 60) + 'د'; }
   function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
-  function openStop() { var s = day.stops[day.stops.length - 1]; return s && !s.out ? s : null; }
+  var draft = sJSON('midan_promo_draft', null); if (!draft || draft.date !== todayKey()) draft = { date: todayKey(), sales: [] };
+  function saveDraft() { sSetJSON('midan_promo_draft', draft); }
+  function tOf(s) { return s.t || s.inT; }
 
   function status(msg, kind) { var b = $('statusBox'); b.textContent = msg; b.className = 'status show ' + (kind === 'error' ? 'status-error' : 'status-ok'); }
   function clearStatus() { $('statusBox').className = 'status'; }
@@ -269,70 +264,41 @@ select { background-position: 13px center, 18px center !important; padding-left:
     return { name: n, city: c, area: a };
   }
 
-  function locate(btn, done) { done(null); }
-
   function send(text) { window.location.href = 'https://wa.me/' + MANAGER_PHONE + '?text=' + encodeURIComponent(text); }
 
-  $('arriveBtn').addEventListener('click', function () {
+  $('sendBtn').addEventListener('click', function () {
     clearStatus();
     var pr = profileOk(); if (!pr) return;
     var place = $('vPlace').value.trim();
-    if (!place) { status('اكتب اسم المحل أو الموقع اللي وصلت له.', 'error'); return; }
-    locate($('arriveBtn'), function (p) {
-      var stop = { place: place, city: pr.city, area: pr.area, inT: Date.now(), noteIn: $('vNote').value.trim() };
-      day.stops.push(stop); saveDay(day);
-      var text = '🟢 وصول بروموتر — زيارة ' + day.stops.length + '\n' +
-        'البروموتر: ' + pr.name + '\n' +
-        'الموقع: ' + place + '\n' +
-        'المنطقة: ' + pr.area + ' — ' + pr.city + '\n' +
-        'الوقت: ' + fmtDate(stop.inT) + ' ' + fmtClock(stop.inT) + '\n' +
-        (stop.noteIn ? 'ملاحظة: ' + stop.noteIn : '');
-      $('vPlace').value = ''; $('vNote').value = '';
-      render(); status('تم تسجيل الوصول. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
-      send(text);
-    });
+    if (!place) { status('اكتب اسم المحل.', 'error'); return; }
+    var stop = { place: place, city: pr.city, area: pr.area, t: Date.now(), sales: draft.sales.slice(), note: $('vNote').value.trim() };
+    day.stops.push(stop); saveDay(day);
+    var text = '🧾 زيارة بروموتر — زيارة ' + day.stops.length + '\n' +
+      'البروموتر: ' + pr.name + '\n' +
+      'المحل: ' + place + '\n' +
+      'المنطقة: ' + pr.area + ' — ' + pr.city + '\n' +
+      'الوقت: ' + fmtDate(stop.t) + ' ' + fmtClock(stop.t) + '\n' +
+      '🧾 الأجهزة المباعة: ' + stop.sales.length + '\n' + salesText(stop.sales) +
+      (stop.note ? 'ملاحظة: ' + stop.note : '');
+    draft = { date: todayKey(), sales: [] }; saveDraft();
+    $('vPlace').value = ''; $('vNote').value = '';
+    render(); status('تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
+    send(text);
   });
-
-  $('leaveBtn').addEventListener('click', function () {
-    clearStatus();
-    var pr = profileOk(); if (!pr) return;
-    var s = openStop(); if (!s) return;
-    locate($('leaveBtn'), function (p) {
-      s.out = Date.now(); s.noteOut = $('vNote').value.trim(); saveDay(day);
-      var text = '🔴 مغادرة بروموتر — زيارة ' + day.stops.length + '\n' +
-        'البروموتر: ' + pr.name + '\n' +
-        'الموقع: ' + s.place + '\n' +
-        'المنطقة: ' + s.area + ' — ' + s.city + '\n' +
-        'وصول: ' + fmtClock(s.inT) + ' · مغادرة: ' + fmtClock(s.out) + '\n' +
-        'مدة الزيارة: ' + fmtDur(s.out - s.inT) + '\n' +
-        (salesOf(s).length ? '🧾 الأجهزة المباعة: ' + salesOf(s).length + '\n' + salesText(salesOf(s)) : '🧾 الأجهزة المباعة: 0\n') +
-        (s.noteOut ? 'ملاحظة: ' + s.noteOut : '');
-      $('vNote').value = '';
-      render(); status('تم تسجيل المغادرة. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
-      send(text);
-    });
-  });
-
-  function totals() {
-    var t = 0;
-    day.stops.forEach(function (s) { t += (s.out || Date.now()) - s.inT; });
-    return { time: t };
-  }
 
   $('reportBtn').addEventListener('click', function () {
     clearStatus();
     var pr = profileOk(); if (!pr) return;
     if (!day.stops.length) { status('ما عندك زيارات اليوم حتى ترسل تقرير.', 'error'); return; }
-    var T = totals();
     var lines = day.stops.map(function (s, i) {
-      return (i + 1) + ') ' + s.place + ' — ' + s.area + '\n   ' + fmtClock(s.inT) + ' ← ' + (s.out ? fmtClock(s.out) + ' (' + fmtDur(s.out - s.inT) + ')' : 'ما سجل مغادرة') + (salesOf(s).length ? ' · 🧾 ' + salesOf(s).length + ' مباع' : '');
+      return (i + 1) + ') ' + s.place + ' — ' + s.area + ' · ' + fmtClock(tOf(s)) + ' · 🧾 ' + salesOf(s).length + ' مباع';
     }).join('\n');
     var text = '📋 تقرير زيارات البروموتر\n' +
       'البروموتر: ' + pr.name + '\n' +
       'المدينة: ' + pr.city + '\n' +
       'التاريخ: ' + fmtDate(Date.now()) + '\n' +
-      'عدد الزيارات: ' + day.stops.length + ' · الوقت بالمحلات: ' + fmtDur(T.time) + '\n' +
-      'أول وصول: ' + fmtClock(day.stops[0].inT) + ' · آخر تسجيل: ' + fmtClock(day.stops[day.stops.length - 1].out || day.stops[day.stops.length - 1].inT) + '\n\n' + lines +
+      'عدد الزيارات: ' + day.stops.length + '\n' +
+      'أول زيارة: ' + fmtClock(tOf(day.stops[0])) + ' · آخر زيارة: ' + fmtClock(tOf(day.stops[day.stops.length - 1])) + '\n\n' + lines +
       '\n\n🧾 الأجهزة المباعة اليوم: ' + allSales().length + '\n' + salesText(allSales());
     send(text);
   });
@@ -370,7 +336,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   $('sImei').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 15); });
   $('addSaleBtn').addEventListener('click', function () {
     clearStatus();
-    var st = openStop(); if (!st) { status('سجّل وصولك للمحل أول، وبعدين ضيف الأجهزة المباعة.', 'error'); return; }
+    var st = draft;
     var br = $('sBrand').value, m = $('sModel').value, im = $('sImei').value.trim();
     if (!m) { status('اختر موديل الجهاز.', 'error'); return; }
     if (m === OTHER) { m = $('sOther').value.trim(); if (!m) { status('اكتب اسم الموديل.', 'error'); return; } }
@@ -378,14 +344,14 @@ select { background-position: 13px center, 18px center !important; padding-left:
     if (!/^\d{15}$/.test(im)) { status('الـ IMEI لازم يكون 15 رقم بالضبط.', 'error'); return; }
     if (!luhn(im)) { status('هذا الـ IMEI مو صحيح (رقم غلط). تأكد منه أو امسحه بالكاميرا.', 'error'); return; }
     if (allImeis().indexOf(im) >= 0) { status('هذا الـ IMEI مسجل قبل من هذا الجهاز. ما ينحسب مرتين.', 'error'); return; }
-    st.sales = salesOf(st); st.sales.push({ brand: br, model: m, imei: im, t: Date.now() }); saveDay(day);
+    st.sales = salesOf(st); st.sales.push({ brand: br, model: m, imei: im, t: Date.now() }); saveDraft();
     var ims = allImeis(); ims.push(im); sSetJSON('midan_promo_imeis', ims.slice(-2000));
     sSet('midan_promo_model', $('sModel').value); $('sImei').value = ''; $('sOther').value = '';
-    render(); status('تمت إضافة ' + (br ? br + ' ' : '') + m + ' — ' + im + '. ينرسل ويا المغادرة وبتقرير اليوم.', 'ok');
+    render(); status('تمت إضافة ' + (br ? br + ' ' : '') + m + ' — ' + im + '. ينرسل ويا الزيارة وبتقرير اليوم.', 'ok');
   });
   window.__delSale = function (i) {
-    var st = openStop(); if (!st || !st.sales || !st.sales[i]) return;
-    var im = st.sales[i].imei; st.sales.splice(i, 1); saveDay(day);
+    var st = draft; if (!st.sales[i]) return;
+    var im = st.sales[i].imei; st.sales.splice(i, 1); saveDraft();
     sSetJSON('midan_promo_imeis', allImeis().filter(function (x) { return x !== im; })); render();
   };
   // camera scan: Android uses the built-in BarcodeDetector; iPhone (and older Android) loads a scanner library
@@ -435,30 +401,15 @@ select { background-position: 13px center, 18px center !important; padding-left:
     if ('BarcodeDetector' in window) nativeScan(); else libScan();
   });
 
-  var tick = null;
   function render() {
-    var s = openStop();
-    $('activeBox').classList.toggle('show', !!s);
-    $('arriveFields').classList.toggle('hidden', !!s);
-    $('arriveBtn').classList.toggle('hidden', !!s);
-    $('leaveBtn').classList.toggle('hidden', !s);
-    $('saleBox').classList.toggle('show', !!s);
-    var cur = salesOf(s);
+    var cur = draft.sales;
     $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + esc((x.brand ? x.brand + ' ' : '') + x.model) + '</b><br><code>' + x.imei + '</code></span><button type="button" aria-label="حذف" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
     $('stSold').textContent = allSales().length;
-    if (s) {
-      $('activePlace').textContent = s.place;
-      var upd = function () { $('activeMeta').textContent = s.area + ' — ' + s.city + ' · من ' + fmtClock(s.inT) + ' · صار لك ' + fmtDur(Date.now() - s.inT); };
-      upd(); clearInterval(tick); tick = setInterval(upd, 30000);
-    } else clearInterval(tick);
-    var T = totals();
-    $('stStops').textContent = day.stops.length; $('stTime').textContent = fmtDur(T.time);
+    $('stStops').textContent = day.stops.length;
     if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p>'; return; }
     $('stopList').innerHTML = day.stops.map(function (x, i) {
-      var open = !x.out;
-      return '<div class="stop"><div class="n' + (open ? ' open' : '') + '">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' +
-        fmtClock(x.inT) + ' ← ' + (open ? '<b style="color:var(--gold)">الآن</b>' : fmtClock(x.out) + ' · ' + fmtDur(x.out - x.inT)) +
-        (salesOf(x).length ? '<br>🧾 ' + salesOf(x).length + ' جهاز مباع' : '') + '</div></div><span></span></div>';
+      return '<div class="stop"><div class="n">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' + fmtClock(tOf(x)) +
+        '<br>🧾 ' + salesOf(x).length + ' جهاز مباع</div></div><span></span></div>';
     }).join('');
   }
   render();
