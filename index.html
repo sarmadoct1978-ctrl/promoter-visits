@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#122238">
+<title>زيارات البروموتر</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap">
+<style>
+:root {
+  --bg: #f6f1e4;
+  --surface: #ffffff;
+  --surface-2: #faf7ee;
+  --fg: #1c1207;
+  --muted: #6b5b3a;
+  --border: rgba(28,18,7,0.12);
+  --navy: #122238;
+  --navy-2: #1c3a5c;
+  --gold: #a8791f;
+  --gold-soft: rgba(168,121,31,0.14);
+  --whatsapp: #22a559;
+  --danger: #b3261e;
+  --danger-soft: rgba(179,38,30,0.1);
+  --success-soft: rgba(34,165,89,0.12);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15120b; --surface: #211b10; --surface-2: #272013; --fg: #f3ecd9;
+    --muted: #c9b98f; --border: rgba(243,236,217,0.14); --navy: #0c1726;
+    --navy-2: #16314e; --gold: #e0b45a; --gold-soft: rgba(224,180,90,0.16);
+    --whatsapp: #35c276; --danger: #ff8178; --danger-soft: rgba(255,129,120,0.14);
+    --success-soft: rgba(53,194,118,0.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15120b; --surface: #211b10; --surface-2: #272013; --fg: #f3ecd9;
+  --muted: #c9b98f; --border: rgba(243,236,217,0.14); --navy: #0c1726;
+  --navy-2: #16314e; --gold: #e0b45a; --gold-soft: rgba(224,180,90,0.16);
+  --whatsapp: #35c276; --danger: #ff8178; --danger-soft: rgba(255,129,120,0.14);
+  --success-soft: rgba(53,194,118,0.14);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+  padding-inline: 16px; padding-block: 20px 40px;
+  max-width: 560px; margin: 0 auto;
+}
+h1, h2, .display { font-family: 'Cairo', 'Tajawal', sans-serif; }
+.eyebrow { font-size: 12.5px; font-weight: 700; color: var(--gold); letter-spacing: .04em; margin: 0 0 4px; }
+h1 { font-size: 22px; font-weight: 900; margin: 0 0 4px; text-wrap: balance; }
+.sub { font-size: 14px; color: var(--muted); margin: 0 0 20px; line-height: 1.6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+.card h2 { font-size: 15px; font-weight: 800; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #f3ecd9; font-size: 12px; font-weight: 800; flex: none; }
+label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+input[type="text"], select {
+  width: 100%; font-family: inherit; font-size: 15px; color: var(--fg);
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 11px 12px; min-width: 0;
+}
+input[type="text"]:focus, select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) center, calc(100% - 13px) center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+.btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 800; border: none; border-radius: 12px; padding: 15px 16px; cursor: pointer; transition: transform .08s ease, opacity .15s ease; }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--navy); color: #f3ecd9; }
+.btn-whatsapp { background: var(--whatsapp); color: #ffffff; }
+.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.status { display: none; border-radius: 10px; padding: 10px 12px; font-size: 13.5px; margin-top: 12px; line-height: 1.6; }
+.status.show { display: block; }
+.status-error { background: var(--danger-soft); color: var(--danger); }
+.status-ok { background: var(--success-soft); color: var(--whatsapp); }
+.gps-box { display: none; align-items: center; gap: 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-top: 12px; font-size: 13px; }
+.gps-box.show { display: flex; }
+.gps-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--whatsapp); flex: none; }
+.gps-box .coords { font-variant-numeric: tabular-nums; color: var(--muted); }
+.history-item { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
+.history-item:first-child { border-top: none; }
+.history-item .who { font-weight: 700; }
+.history-time { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+.history-empty { color: var(--muted); font-size: 13.5px; padding: 6px 0; }
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.install-banner { display: none; align-items: center; gap: 10px; background: var(--gold-soft); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 13.5px; }
+.install-banner.show { display: flex; }
+.install-banner button { margin-inline-start: auto; background: var(--navy); color: #f3ecd9; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; flex: none; }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+textarea { width: 100%; font-family: inherit; font-size: 15px; color: var(--fg); background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; min-height: 64px; resize: vertical; }
+textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.active-visit { display: none; background: var(--gold-soft); border: 1.5px solid var(--gold); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+.active-visit.show { display: block; }
+.active-visit .t { font-size: 12.5px; color: var(--gold); font-weight: 800; }
+.active-visit .p { font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 800; margin: 2px 0; }
+.active-visit .m { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+.stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
+.stat b { display: block; font-family: 'Cairo', sans-serif; font-size: 20px; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .stat b { color: var(--gold); } :root:not([data-theme="light"]) .btn-outline { color: var(--fg); border-color: var(--fg); } }
+.stat span { font-size: 11.5px; color: var(--muted); }
+.stop { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); align-items: start; }
+.stop:first-child { border-top: none; }
+.stop .n { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #f3ecd9; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.stop .n.open { background: var(--gold); }
+.stop .pl { font-weight: 700; font-size: 14px; }
+.stop .meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.6; }
+.stop a { color: var(--navy-2); font-size: 12.5px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.warn { color: var(--danger); font-weight: 700; }
+.sale-box { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.sale-box.show { display: block; }
+.sale-box h3 { font-family: 'Cairo', sans-serif; font-size: 14.5px; font-weight: 800; margin: 0 0 10px; }
+.imei-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.imei-row input { font-variant-numeric: tabular-nums; letter-spacing: .04em; direction: ltr; text-align: left; }
+.btn-sm { font-family: 'Cairo', sans-serif; font-size: 13.5px; font-weight: 800; border: none; border-radius: 10px; padding: 0 14px; cursor: pointer; background: var(--navy); color: #f3ecd9; }
+.sale-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
+.sale-item:first-child { border-top: none; }
+.sale-item code { font-variant-numeric: tabular-nums; direction: ltr; font-size: 13px; color: var(--muted); }
+.sale-item button { background: none; border: none; color: var(--danger); font-size: 18px; cursor: pointer; padding: 0 4px; }
+.scan-wrap { position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+.scan-wrap.show { display: flex; }
+.scan-wrap video { width: 100%; max-width: 480px; border-radius: 14px; background: #000; }
+.scan-wrap p { color: #fff; font-size: 14px; text-align: center; margin: 12px 0; }
+.scan-line { position: relative; width: 100%; max-width: 480px; }
+.scan-line::after { content: ''; position: absolute; left: 8%; right: 8%; top: 50%; height: 2px; background: #ff5a3c; box-shadow: 0 0 8px #ff5a3c; }
+select { background-position: 13px center, 18px center !important; padding-left: 34px !important; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="install-banner" id="installBanner">
+  <span>📲 ثبّت هذا التطبيق على شاشتك الرئيسية لفتحه بضغطة وحدة.</span>
+  <button id="installBtn" type="button">تثبيت</button>
+</div>
+
+<p class="eyebrow">شركة الميدان · فريق البروموتر</p>
+<h1>تسجيل زيارات البروموتر</h1>
+<p class="sub">سجّل وصولك ومغادرتك لكل موقع تزوره. التطبيق ياخذ موقعك الحالي ويرسل التسجيل لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
+
+<div class="card">
+  <h2><span class="step-num">1</span> بياناتك</h2>
+  <div class="field">
+    <label for="pName">اسمك</label>
+    <input type="text" id="pName" placeholder="مثال: محمد علي" autocomplete="off">
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="pCity">المدينة</label>
+      <input type="text" id="pCity" list="cities" placeholder="مثال: بغداد" autocomplete="off">
+      <datalist id="cities"></datalist>
+    </div>
+    <div class="field">
+      <label for="pArea">المنطقة</label>
+      <input type="text" id="pArea" placeholder="مثال: الكرادة" autocomplete="off">
+    </div>
+  </div>
+  <p class="note" style="margin-top:4px;padding-top:10px;">بياناتك تنحفظ بجهازك، فما تحتاج تكتبها كل مرة. تگدر تبدّل المنطقة إذا رحت لمنطقة ثانية.</p>
+</div>
+
+<div class="card">
+  <h2><span class="step-num">2</span> الزيارة الحالية</h2>
+  <div class="active-visit" id="activeBox">
+    <div class="t">● أنت الآن بزيارة</div>
+    <div class="p" id="activePlace"></div>
+    <div class="m" id="activeMeta"></div>
+  </div>
+  <div id="arriveFields">
+    <div class="field">
+      <label for="vPlace">اسم المحل أو الموقع</label>
+      <input type="text" id="vPlace" placeholder="مثال: محلات النور للموبايل" autocomplete="off">
+    </div>
+  </div>
+  <div class="sale-box" id="saleBox" style="margin-top:0;padding-top:0;border-top:none;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border);">
+    <h3>🧾 الأجهزة المباعة بهذي الزيارة (Oukitel · Infinix · ZTE)</h3>
+    <div class="row2">
+      <div class="field">
+        <label for="sBrand">البراند</label>
+        <select id="sBrand"></select>
+      </div>
+      <div class="field">
+        <label for="sModel">الموديل</label>
+        <select id="sModel"></select>
+      </div>
+    </div>
+    <div class="field hidden" id="sOtherWrap">
+      <label for="sOther">اكتب الموديل</label>
+      <input type="text" id="sOther" placeholder="مثال: C61 128+4" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="sImei">IMEI (15 رقم)</label>
+      <div class="imei-row">
+        <input type="text" id="sImei" inputmode="numeric" maxlength="15" placeholder="35xxxxxxxxxxxxx" autocomplete="off">
+        <button class="btn-sm" id="scanBtn" type="button">📷 مسح</button>
+      </div>
+    </div>
+    <button class="btn btn-outline" id="addSaleBtn" type="button" style="padding:12px;font-size:15px;">+ إضافة الجهاز</button>
+    <div id="saleList" style="margin-top:10px;"></div>
+  </div>
+  <div class="field">
+    <label for="vNote">ملاحظة (اختياري)</label>
+    <textarea id="vNote" placeholder="مثال: رتبت العرض، ركبت بوستر C62، المحل يطلب 10 أجهزة"></textarea>
+  </div>
+  <button class="btn btn-primary" id="arriveBtn" type="button"><span class="ic" aria-hidden="true">📍</span><span class="lb">تسجيل الوصول للموقع</span></button>
+  <button class="btn btn-gold hidden" id="leaveBtn" type="button"><span class="ic" aria-hidden="true">🚪</span><span class="lb">تسجيل المغادرة من الموقع</span></button>
+  <div class="gps-box" id="gpsBox"><span class="gps-dot"></span><span>آخر موقع — <span class="coords" id="gpsCoords"></span></span></div>
+  <div class="status" id="statusBox"></div>
+</div>
+
+<div class="card">
+  <h2><span class="step-num">3</span> زيارات اليوم</h2>
+  <div class="stats">
+    <div class="stat"><b id="stStops">0</b><span>زيارة</span></div>
+    <div class="stat"><b id="stTime">0د</b><span>بالمواقع</span></div>
+    <div class="stat"><b id="stKm">0</b><span>كم تقريبًا</span></div>
+    <div class="stat"><b id="stSold">0</b><span>جهاز مباع</span></div>
+  </div>
+  <div id="stopList"><p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p></div>
+  <button class="btn btn-whatsapp" id="reportBtn" type="button" style="margin-top:12px;"><span aria-hidden="true">💬</span><span>إرسال تقرير اليوم عبر واتساب</span></button>
+  <p class="note">السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.</p>
+</div>
+
+<div class="scan-wrap" id="scanWrap"><div class="scan-line" id="scanLine"><video id="scanVideo" playsinline muted></video></div><div id="scanReader" style="width:100%;max-width:480px;display:none;border-radius:14px;overflow:hidden;background:#000;"></div><p id="scanMsg">وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز</p><button class="btn btn-gold" id="scanClose" type="button" style="max-width:480px;">إلغاء</button></div>
+
+<script>
+(function () {
+  var MANAGER_PHONE = "9647735350223";   // رقم مسؤول المتابعة — 964 بدون + وبدون صفر
+  var CITIES = ["بغداد","البصرة","نينوى - الموصل","أربيل","النجف","كربلاء","بابل - الحلة","كركوك","السليمانية","دهوك","الأنبار - الرمادي","ديالى - بعقوبة","صلاح الدين - تكريت","واسط - الكوت","ذي قار - الناصرية","ميسان - العمارة","المثنى - السماوة","القادسية - الديوانية","حلبجة"];
+  var $ = function (id) { return document.getElementById(id); };
+  CITIES.forEach(function (c) { var o = document.createElement('option'); o.value = c; $('cities').appendChild(o); });
+
+  function sGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function sSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function sJSON(k, d) { try { var r = localStorage.getItem(k); return r ? JSON.parse(r) : d; } catch (e) { return d; } }
+  function sSetJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  ['pName','pCity','pArea'].forEach(function (id) {
+    var v = sGet('midan_promo_' + id); if (v) $(id).value = v;
+    $(id).addEventListener('change', function () { sSet('midan_promo_' + id, $(id).value.trim()); });
+  });
+
+  function todayKey() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function loadDay() { var d = sJSON('midan_promo_day', null); if (!d || d.date !== todayKey()) d = { date: todayKey(), stops: [] }; return d; }
+  function saveDay(d) { sSetJSON('midan_promo_day', d); }
+  var day = loadDay();
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtClock(t) { var d = new Date(t), h = d.getHours(), ap = h >= 12 ? 'م' : 'ص', h12 = h % 12 || 12; return h12 + ':' + pad(d.getMinutes()) + ' ' + ap; }
+  function fmtDate(t) { var d = new Date(t), days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; return days[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
+  function fmtDur(ms) { var m = Math.max(0, Math.round(ms / 60000)); if (m < 60) return m + 'د'; return Math.floor(m / 60) + 'س ' + pad(m % 60) + 'د'; }
+  function km(a, b) { var R = 6371, r = Math.PI / 180, dLa = (b.lat - a.lat) * r, dLo = (b.lng - a.lng) * r;
+    var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLo / 2) * Math.sin(dLo / 2); return 2 * R * Math.asin(Math.sqrt(x)); }
+  function maps(p) { return 'https://maps.google.com/?q=' + p.lat.toFixed(6) + ',' + p.lng.toFixed(6); }
+  function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function openStop() { var s = day.stops[day.stops.length - 1]; return s && !s.out ? s : null; }
+
+  function status(msg, kind) { var b = $('statusBox'); b.textContent = msg; b.className = 'status show ' + (kind === 'error' ? 'status-error' : 'status-ok'); }
+  function clearStatus() { $('statusBox').className = 'status'; }
+
+  function profileOk() {
+    var n = $('pName').value.trim(), c = $('pCity').value.trim(), a = $('pArea').value.trim();
+    if (!n || !c || !a) { status('عبّي اسمك والمدينة والمنطقة أول.', 'error'); return null; }
+    sSet('midan_promo_pName', n); sSet('midan_promo_pCity', c); sSet('midan_promo_pArea', a);
+    return { name: n, city: c, area: a };
+  }
+
+  function locate(btn, done) {
+    if (!('geolocation' in navigator)) { status('جهازك أو المتصفح ما يدعم تحديد الموقع. جرب من كروم.', 'error'); return; }
+    var ic = btn.querySelector('.ic'), lb = btn.querySelector('.lb'), oi = ic.innerHTML, ol = lb.textContent;
+    btn.disabled = true; ic.innerHTML = '<span class="spinner"></span>'; lb.textContent = 'جاري تحديد الموقع…';
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      btn.disabled = false; ic.innerHTML = oi; lb.textContent = ol;
+      var p = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) };
+      $('gpsCoords').textContent = p.lat.toFixed(5) + ', ' + p.lng.toFixed(5) + ' (دقة ~' + p.acc + 'م)';
+      $('gpsBox').classList.add('show');
+      done(p);
+    }, function (err) {
+      btn.disabled = false; ic.innerHTML = oi; lb.textContent = ol;
+      var m = 'تعذر تحديد الموقع. حاول مرة ثانية.';
+      if (err.code === 1) m = 'رفضت صلاحية الموقع. فعّل صلاحية الموقع من إعدادات المتصفح وجرب مرة ثانية.';
+      else if (err.code === 2) m = 'ما كدرنا نحدد موقعك. تأكد إن الـ GPS مفعّل بجهازك.';
+      else if (err.code === 3) m = 'تحديد الموقع طوّل. جرب مرة ثانية بمكان مفتوح.';
+      status(m, 'error');
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+  }
+
+  function send(text) { window.location.href = 'https://wa.me/' + MANAGER_PHONE + '?text=' + encodeURIComponent(text); }
+  function accLine(p) { return p.acc > 200 ? '⚠️ دقة الموقع ضعيفة (~' + p.acc + 'م)\n' : ''; }
+
+  $('arriveBtn').addEventListener('click', function () {
+    clearStatus();
+    var pr = profileOk(); if (!pr) return;
+    var place = $('vPlace').value.trim();
+    if (!place) { status('اكتب اسم المحل أو الموقع اللي وصلت له.', 'error'); return; }
+    locate($('arriveBtn'), function (p) {
+      var prev = day.stops.length ? day.stops[day.stops.length - 1] : null;
+      var stop = { place: place, city: pr.city, area: pr.area, inT: Date.now(), inP: p, noteIn: $('vNote').value.trim() };
+      day.stops.push(stop); saveDay(day);
+      var dist = prev ? km(prev.outP || prev.inP, p) : 0;
+      var text = '🟢 وصول بروموتر — زيارة ' + day.stops.length + '\n' +
+        'البروموتر: ' + pr.name + '\n' +
+        'الموقع: ' + place + '\n' +
+        'المنطقة: ' + pr.area + ' — ' + pr.city + '\n' +
+        'الوقت: ' + fmtDate(stop.inT) + ' ' + fmtClock(stop.inT) + '\n' +
+        (prev ? 'المسافة من الزيارة السابقة: ' + dist.toFixed(1) + ' كم\n' : '') +
+        (stop.noteIn ? 'ملاحظة: ' + stop.noteIn + '\n' : '') + accLine(p) +
+        '📍 ' + maps(p);
+      $('vPlace').value = ''; $('vNote').value = '';
+      render(); status('تم تسجيل الوصول. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
+      send(text);
+    });
+  });
+
+  $('leaveBtn').addEventListener('click', function () {
+    clearStatus();
+    var pr = profileOk(); if (!pr) return;
+    var s = openStop(); if (!s) return;
+    locate($('leaveBtn'), function (p) {
+      s.out = Date.now(); s.outP = p; s.noteOut = $('vNote').value.trim(); saveDay(day);
+      var moved = km(s.inP, p);
+      var text = '🔴 مغادرة بروموتر — زيارة ' + day.stops.length + '\n' +
+        'البروموتر: ' + pr.name + '\n' +
+        'الموقع: ' + s.place + '\n' +
+        'المنطقة: ' + s.area + ' — ' + s.city + '\n' +
+        'وصول: ' + fmtClock(s.inT) + ' · مغادرة: ' + fmtClock(s.out) + '\n' +
+        'مدة الزيارة: ' + fmtDur(s.out - s.inT) + '\n' +
+        (moved > 0.3 ? '⚠️ موقع المغادرة يبعد ' + moved.toFixed(1) + ' كم عن موقع الوصول\n' : '') +
+        (salesOf(s).length ? '🧾 الأجهزة المباعة: ' + salesOf(s).length + '\n' + salesText(salesOf(s)) : '🧾 الأجهزة المباعة: 0\n') +
+        (s.noteOut ? 'ملاحظة: ' + s.noteOut + '\n' : '') + accLine(p) +
+        '📍 ' + maps(p);
+      $('vNote').value = '';
+      render(); status('تم تسجيل المغادرة. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
+      send(text);
+    });
+  });
+
+  function totals() {
+    var t = 0, d = 0, prev = null;
+    day.stops.forEach(function (s) { t += (s.out || Date.now()) - s.inT; if (prev) d += km(prev.outP || prev.inP, s.inP); prev = s; });
+    return { time: t, km: d };
+  }
+
+  $('reportBtn').addEventListener('click', function () {
+    clearStatus();
+    var pr = profileOk(); if (!pr) return;
+    if (!day.stops.length) { status('ما عندك زيارات اليوم حتى ترسل تقرير.', 'error'); return; }
+    var T = totals();
+    var lines = day.stops.map(function (s, i) {
+      return (i + 1) + ') ' + s.place + ' — ' + s.area + '\n   ' + fmtClock(s.inT) + ' ← ' + (s.out ? fmtClock(s.out) + ' (' + fmtDur(s.out - s.inT) + ')' : 'ما سجل مغادرة') + (salesOf(s).length ? ' · 🧾 ' + salesOf(s).length + ' مباع' : '') + '\n   📍 ' + maps(s.inP);
+    }).join('\n');
+    var text = '📋 تقرير زيارات البروموتر\n' +
+      'البروموتر: ' + pr.name + '\n' +
+      'المدينة: ' + pr.city + '\n' +
+      'التاريخ: ' + fmtDate(Date.now()) + '\n' +
+      'عدد الزيارات: ' + day.stops.length + ' · الوقت بالمواقع: ' + fmtDur(T.time) + ' · المسافة: ~' + T.km.toFixed(1) + ' كم\n' +
+      'أول وصول: ' + fmtClock(day.stops[0].inT) + ' · آخر تسجيل: ' + fmtClock(day.stops[day.stops.length - 1].out || day.stops[day.stops.length - 1].inT) + '\n\n' + lines +
+      '\n\n🧾 الأجهزة المباعة اليوم: ' + allSales().length + '\n' + salesText(allSales());
+    send(text);
+  });
+
+
+  // ---------- sold devices (model + IMEI) ----------
+  var OTHER = 'موديل ثاني';
+  var BRANDS = {
+    'Oukitel': ["C62 128+4","C26 128+4","C26 128+6","C17 128+4","C59 Pro 256+8","C68 128+4","C68 Plus 128+4","C68 Plus 512+8","P1 Pro 512+8","Action 15 256+6","A5 Pro 256+3"],
+    'Infinix': ["Smart 10 64+3","Smart 10 128+4","Smart 10 Plus 128+8","Smart 20 64+4","Smart 20 128+4","Smart 20 256+4","Hot 60 Pro 256+8","Hot 60 Pro+ 256+8","Hot 70 256+4","Note 60 256+8","Note 60 Pro 5G 256+8","Note 60 Pro 5G 256+12","Note 60 Pro 5G Box 256+12","Note 60 Ultra 5G 512+12","Note Edge 5G 256+8","GT 50 Pro 256+12","GT 50 Pro 512+12","XPAD GT 256+8"],
+    'ZTE': ["Nubia A35E 64+2","Nubia A36 64+2","Nubia Neo5 Max 256+8","Nubia Neo5 GT 256+12","Nubia Neo5 GT 512+12"]
+  };
+  Object.keys(BRANDS).concat(['براند ثاني']).forEach(function (b) { var o = document.createElement('option'); o.textContent = b; $('sBrand').appendChild(o); });
+  function fillModels(keep) {
+    var b = $('sBrand').value, list = (BRANDS[b] || []).concat([OTHER]), sel = $('sModel');
+    sel.innerHTML = '<option value="">اختر الموديل</option>' + list.map(function (m) { return '<option>' + m + '</option>'; }).join('');
+    if (keep && list.indexOf(keep) >= 0) sel.value = keep;
+    if (!BRANDS[b]) sel.value = OTHER;
+    $('sOtherWrap').classList.toggle('hidden', sel.value !== OTHER);
+  }
+  $('sBrand').addEventListener('change', function () { sSet('midan_promo_brand', this.value); fillModels(); });
+  $('sModel').addEventListener('change', function () { $('sOtherWrap').classList.toggle('hidden', this.value !== OTHER); });
+  var lb = sGet('midan_promo_brand'); if (lb) $('sBrand').value = lb;
+  fillModels(sGet('midan_promo_model'));
+  function luhn(n) { var s = 0; for (var i = 0; i < 15; i++) { var d = +n[14 - i]; if (i % 2) { d *= 2; if (d > 9) d -= 9; } s += d; } return s % 10 === 0; }
+  function allImeis() { return sJSON('midan_promo_imeis', []); }
+  function salesOf(st) { return st && st.sales ? st.sales : []; }
+  function allSales() { var a = []; day.stops.forEach(function (st) { a = a.concat(salesOf(st)); }); return a; }
+  function salesText(list) {
+    if (!list.length) return '';
+    var by = {}; list.forEach(function (x) { var k = (x.brand ? x.brand + ' ' : '') + x.model; by[k] = (by[k] || 0) + 1; });
+    return Object.keys(by).map(function (m) { return '• ' + m + ': ' + by[m]; }).join('\n') + '\n' +
+      list.map(function (x, i) { return (i + 1) + '. ' + (x.brand ? x.brand + ' ' : '') + x.model + ' — ' + x.imei; }).join('\n') + '\n';
+  }
+  $('sImei').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 15); });
+  $('addSaleBtn').addEventListener('click', function () {
+    clearStatus();
+    var st = openStop(); if (!st) { status('سجّل وصولك للمحل أول، وبعدين ضيف الأجهزة المباعة.', 'error'); return; }
+    var br = $('sBrand').value, m = $('sModel').value, im = $('sImei').value.trim();
+    if (!m) { status('اختر موديل الجهاز.', 'error'); return; }
+    if (m === OTHER) { m = $('sOther').value.trim(); if (!m) { status('اكتب اسم الموديل.', 'error'); return; } }
+    if (br === 'براند ثاني') br = '';
+    if (!/^\d{15}$/.test(im)) { status('الـ IMEI لازم يكون 15 رقم بالضبط.', 'error'); return; }
+    if (!luhn(im)) { status('هذا الـ IMEI مو صحيح (رقم غلط). تأكد منه أو امسحه بالكاميرا.', 'error'); return; }
+    if (allImeis().indexOf(im) >= 0) { status('هذا الـ IMEI مسجل قبل من هذا الجهاز. ما ينحسب مرتين.', 'error'); return; }
+    st.sales = salesOf(st); st.sales.push({ brand: br, model: m, imei: im, t: Date.now() }); saveDay(day);
+    var ims = allImeis(); ims.push(im); sSetJSON('midan_promo_imeis', ims.slice(-2000));
+    sSet('midan_promo_model', $('sModel').value); $('sImei').value = ''; $('sOther').value = '';
+    render(); status('تمت إضافة ' + (br ? br + ' ' : '') + m + ' — ' + im + '. ينرسل ويا المغادرة وبتقرير اليوم.', 'ok');
+  });
+  window.__delSale = function (i) {
+    var st = openStop(); if (!st || !st.sales || !st.sales[i]) return;
+    var im = st.sales[i].imei; st.sales.splice(i, 1); saveDay(day);
+    sSetJSON('midan_promo_imeis', allImeis().filter(function (x) { return x !== im; })); render();
+  };
+  // camera scan: Android uses the built-in BarcodeDetector; iPhone (and older Android) loads a scanner library
+  var scanStream = null, scanTimer = null, libScanner = null;
+  function found(code) {
+    var m = String(code || '').match(/\d{15}/g) || [];
+    for (var j = 0; j < m.length; j++) if (luhn(m[j])) { $('sImei').value = m[j]; stopScan(); status('تم مسح الـ IMEI: ' + m[j] + '. تأكد من الموديل واكبس إضافة.', 'ok'); return true; }
+    return false;
+  }
+  function stopScan() {
+    clearInterval(scanTimer); if (scanStream) scanStream.getTracks().forEach(function (t) { t.stop(); }); scanStream = null;
+    if (libScanner) { var l = libScanner; libScanner = null; l.stop().then(function () { l.clear(); }).catch(function () {}); }
+    $('scanWrap').classList.remove('show');
+  }
+  $('scanClose').addEventListener('click', stopScan);
+  function nativeScan() {
+    var det = new BarcodeDetector({ formats: ['code_128', 'code_39', 'ean_13', 'qr_code', 'data_matrix'] });
+    $('scanLine').style.display = ''; $('scanReader').style.display = 'none';
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function (stream) {
+      scanStream = stream; var v = $('scanVideo'); v.srcObject = stream; v.play(); $('scanWrap').classList.add('show');
+      scanTimer = setInterval(function () {
+        det.detect(v).then(function (codes) { for (var i = 0; i < codes.length; i++) if (found(codes[i].rawValue)) return; }).catch(function () {});
+      }, 300);
+    }).catch(camErr);
+  }
+  function camErr() { stopScan(); status('ما كدرنا نفتح الكاميرا. اسمح بصلاحية الكاميرا من إعدادات الموبايل، أو اكتب الـ IMEI بإيدك.', 'error'); }
+  function loadLib(cb) {
+    if (window.Html5Qrcode) return cb();
+    var sc = document.createElement('script'); sc.src = 'html5-qrcode.min.js';
+    sc.onload = cb; sc.onerror = function () { status('ما كدرنا نحمّل الماسح. تگدر تكتب الـ IMEI بإيدك.', 'error'); };
+    document.head.appendChild(sc);
+  }
+  function libScan() {
+    var b = $('scanBtn'), old = b.innerHTML; b.disabled = true; b.innerHTML = '…';
+    loadLib(function () {
+      b.disabled = false; b.innerHTML = old;
+      $('scanLine').style.display = 'none'; $('scanReader').style.display = ''; $('scanWrap').classList.add('show');
+      var F = window.Html5QrcodeSupportedFormats;
+      libScanner = new Html5Qrcode('scanReader', { formatsToSupport: [F.CODE_128, F.CODE_39, F.EAN_13, F.QR_CODE, F.DATA_MATRIX], verbose: false });
+      libScanner.start({ facingMode: 'environment' }, { fps: 12, qrbox: function (w, h) { return { width: Math.round(w * 0.9), height: Math.round(Math.min(h, w) * 0.4) }; } },
+        function (text) { found(text); }, function () {}).catch(camErr);
+    });
+  }
+  $('scanBtn').addEventListener('click', function () {
+    clearStatus();
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { status('هذا المتصفح ما يسمح بالكاميرا. افتح الرابط من Safari بالآيفون أو Chrome بالأندرويد، أو اكتب الـ IMEI بإيدك.', 'error'); return; }
+    if ('BarcodeDetector' in window) nativeScan(); else libScan();
+  });
+
+  var tick = null;
+  function render() {
+    var s = openStop();
+    $('activeBox').classList.toggle('show', !!s);
+    $('arriveFields').classList.toggle('hidden', !!s);
+    $('arriveBtn').classList.toggle('hidden', !!s);
+    $('leaveBtn').classList.toggle('hidden', !s);
+    $('saleBox').classList.toggle('show', !!s);
+    var cur = salesOf(s);
+    $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + esc((x.brand ? x.brand + ' ' : '') + x.model) + '</b><br><code>' + x.imei + '</code></span><button type="button" aria-label="حذف" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
+    $('stSold').textContent = allSales().length;
+    if (s) {
+      $('activePlace').textContent = s.place;
+      var upd = function () { $('activeMeta').textContent = s.area + ' — ' + s.city + ' · من ' + fmtClock(s.inT) + ' · صار لك ' + fmtDur(Date.now() - s.inT); };
+      upd(); clearInterval(tick); tick = setInterval(upd, 30000);
+    } else clearInterval(tick);
+    var T = totals();
+    $('stStops').textContent = day.stops.length; $('stTime').textContent = fmtDur(T.time); $('stKm').textContent = T.km.toFixed(1);
+    if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p>'; return; }
+    $('stopList').innerHTML = day.stops.map(function (x, i) {
+      var open = !x.out, far = x.out && km(x.inP, x.outP) > 0.3;
+      return '<div class="stop"><div class="n' + (open ? ' open' : '') + '">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' +
+        fmtClock(x.inT) + ' ← ' + (open ? '<b style="color:var(--gold)">الآن</b>' : fmtClock(x.out) + ' · ' + fmtDur(x.out - x.inT)) +
+        (salesOf(x).length ? '<br>🧾 ' + salesOf(x).length + ' جهاز مباع' : '') + (far ? '<br><span class="warn">⚠️ المغادرة من مكان بعيد عن الوصول</span>' : '') + '</div></div><a href="' + maps(x.inP) + '" target="_blank" rel="noopener">الخريطة ↗</a></div>';
+    }).join('');
+  }
+  render();
+
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && !standalone) {
+    $('installBanner').querySelector('span').textContent = '📲 للآيفون: اكبس زر المشاركة ⬆️ بـ Safari، وبعدها «إضافة إلى الشاشة الرئيسية».';
+    $('installBtn').textContent = 'تمام'; $('installBanner').classList.add('show');
+  }
+  var deferred = null;
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; $('installBanner').classList.add('show'); });
+  $('installBtn').addEventListener('click', function () { $('installBanner').classList.remove('show'); if (deferred) { deferred.prompt(); deferred = null; } });
+  window.addEventListener('appinstalled', function () { $('installBanner').classList.remove('show'); });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+})();
+</script>
+
+</body>
+</html>
