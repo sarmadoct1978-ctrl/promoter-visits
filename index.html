@@ -104,7 +104,7 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .active-visit .t { font-size: 12.5px; color: var(--gold); font-weight: 800; }
 .active-visit .p { font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 800; margin: 2px 0; }
 .active-visit .m { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
 .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
 .stat b { display: block; font-family: 'Cairo', sans-serif; font-size: 20px; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .stat b { color: var(--gold); } :root:not([data-theme="light"]) .btn-outline { color: var(--fg); border-color: var(--fg); } }
@@ -146,7 +146,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
 <p class="eyebrow">شركة الميدان · فريق البروموتر</p>
 <h1>تسجيل زيارات البروموتر</h1>
-<p class="sub">سجّل وصولك ومغادرتك لكل موقع تزوره. التطبيق ياخذ موقعك الحالي ويرسل التسجيل لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
+<p class="sub">سجّل وصولك ومغادرتك لكل محل تزوره. التطبيق يرسل التسجيل لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
 
 <div class="card">
   <h2><span class="step-num">1</span> بياناتك</h2>
@@ -211,9 +211,8 @@ select { background-position: 13px center, 18px center !important; padding-left:
     <label for="vNote">ملاحظة (اختياري)</label>
     <textarea id="vNote" placeholder="مثال: رتبت العرض، ركبت بوستر C62، المحل يطلب 10 أجهزة"></textarea>
   </div>
-  <button class="btn btn-primary" id="arriveBtn" type="button"><span class="ic" aria-hidden="true">📍</span><span class="lb">تسجيل الوصول للموقع</span></button>
-  <button class="btn btn-gold hidden" id="leaveBtn" type="button"><span class="ic" aria-hidden="true">🚪</span><span class="lb">تسجيل المغادرة من الموقع</span></button>
-  <div class="gps-box" id="gpsBox"><span class="gps-dot"></span><span>آخر موقع — <span class="coords" id="gpsCoords"></span></span></div>
+  <button class="btn btn-primary" id="arriveBtn" type="button"><span class="ic" aria-hidden="true">✅</span><span class="lb">تسجيل الوصول للمحل</span></button>
+  <button class="btn btn-gold hidden" id="leaveBtn" type="button"><span class="ic" aria-hidden="true">🚪</span><span class="lb">تسجيل المغادرة من المحل</span></button>
   <div class="status" id="statusBox"></div>
 </div>
 
@@ -221,8 +220,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   <h2><span class="step-num">3</span> زيارات اليوم</h2>
   <div class="stats">
     <div class="stat"><b id="stStops">0</b><span>زيارة</span></div>
-    <div class="stat"><b id="stTime">0د</b><span>بالمواقع</span></div>
-    <div class="stat"><b id="stKm">0</b><span>كم تقريبًا</span></div>
+    <div class="stat"><b id="stTime">0د</b><span>بالمحلات</span></div>
     <div class="stat"><b id="stSold">0</b><span>جهاز مباع</span></div>
   </div>
   <div id="stopList"><p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p></div>
@@ -258,9 +256,6 @@ select { background-position: 13px center, 18px center !important; padding-left:
   function fmtClock(t) { var d = new Date(t), h = d.getHours(), ap = h >= 12 ? 'م' : 'ص', h12 = h % 12 || 12; return h12 + ':' + pad(d.getMinutes()) + ' ' + ap; }
   function fmtDate(t) { var d = new Date(t), days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; return days[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
   function fmtDur(ms) { var m = Math.max(0, Math.round(ms / 60000)); if (m < 60) return m + 'د'; return Math.floor(m / 60) + 'س ' + pad(m % 60) + 'د'; }
-  function km(a, b) { var R = 6371, r = Math.PI / 180, dLa = (b.lat - a.lat) * r, dLo = (b.lng - a.lng) * r;
-    var x = Math.sin(dLa / 2) * Math.sin(dLa / 2) + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLo / 2) * Math.sin(dLo / 2); return 2 * R * Math.asin(Math.sqrt(x)); }
-  function maps(p) { return 'https://maps.google.com/?q=' + p.lat.toFixed(6) + ',' + p.lng.toFixed(6); }
   function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
   function openStop() { var s = day.stops[day.stops.length - 1]; return s && !s.out ? s : null; }
 
@@ -274,28 +269,9 @@ select { background-position: 13px center, 18px center !important; padding-left:
     return { name: n, city: c, area: a };
   }
 
-  function locate(btn, done) {
-    if (!('geolocation' in navigator)) { status('جهازك أو المتصفح ما يدعم تحديد الموقع. جرب من كروم.', 'error'); return; }
-    var ic = btn.querySelector('.ic'), lb = btn.querySelector('.lb'), oi = ic.innerHTML, ol = lb.textContent;
-    btn.disabled = true; ic.innerHTML = '<span class="spinner"></span>'; lb.textContent = 'جاري تحديد الموقع…';
-    navigator.geolocation.getCurrentPosition(function (pos) {
-      btn.disabled = false; ic.innerHTML = oi; lb.textContent = ol;
-      var p = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) };
-      $('gpsCoords').textContent = p.lat.toFixed(5) + ', ' + p.lng.toFixed(5) + ' (دقة ~' + p.acc + 'م)';
-      $('gpsBox').classList.add('show');
-      done(p);
-    }, function (err) {
-      btn.disabled = false; ic.innerHTML = oi; lb.textContent = ol;
-      var m = 'تعذر تحديد الموقع. حاول مرة ثانية.';
-      if (err.code === 1) m = 'رفضت صلاحية الموقع. فعّل صلاحية الموقع من إعدادات المتصفح وجرب مرة ثانية.';
-      else if (err.code === 2) m = 'ما كدرنا نحدد موقعك. تأكد إن الـ GPS مفعّل بجهازك.';
-      else if (err.code === 3) m = 'تحديد الموقع طوّل. جرب مرة ثانية بمكان مفتوح.';
-      status(m, 'error');
-    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
-  }
+  function locate(btn, done) { done(null); }
 
   function send(text) { window.location.href = 'https://wa.me/' + MANAGER_PHONE + '?text=' + encodeURIComponent(text); }
-  function accLine(p) { return p.acc > 200 ? '⚠️ دقة الموقع ضعيفة (~' + p.acc + 'م)\n' : ''; }
 
   $('arriveBtn').addEventListener('click', function () {
     clearStatus();
@@ -303,18 +279,14 @@ select { background-position: 13px center, 18px center !important; padding-left:
     var place = $('vPlace').value.trim();
     if (!place) { status('اكتب اسم المحل أو الموقع اللي وصلت له.', 'error'); return; }
     locate($('arriveBtn'), function (p) {
-      var prev = day.stops.length ? day.stops[day.stops.length - 1] : null;
-      var stop = { place: place, city: pr.city, area: pr.area, inT: Date.now(), inP: p, noteIn: $('vNote').value.trim() };
+      var stop = { place: place, city: pr.city, area: pr.area, inT: Date.now(), noteIn: $('vNote').value.trim() };
       day.stops.push(stop); saveDay(day);
-      var dist = prev ? km(prev.outP || prev.inP, p) : 0;
       var text = '🟢 وصول بروموتر — زيارة ' + day.stops.length + '\n' +
         'البروموتر: ' + pr.name + '\n' +
         'الموقع: ' + place + '\n' +
         'المنطقة: ' + pr.area + ' — ' + pr.city + '\n' +
         'الوقت: ' + fmtDate(stop.inT) + ' ' + fmtClock(stop.inT) + '\n' +
-        (prev ? 'المسافة من الزيارة السابقة: ' + dist.toFixed(1) + ' كم\n' : '') +
-        (stop.noteIn ? 'ملاحظة: ' + stop.noteIn + '\n' : '') + accLine(p) +
-        '📍 ' + maps(p);
+        (stop.noteIn ? 'ملاحظة: ' + stop.noteIn : '');
       $('vPlace').value = ''; $('vNote').value = '';
       render(); status('تم تسجيل الوصول. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
       send(text);
@@ -326,18 +298,15 @@ select { background-position: 13px center, 18px center !important; padding-left:
     var pr = profileOk(); if (!pr) return;
     var s = openStop(); if (!s) return;
     locate($('leaveBtn'), function (p) {
-      s.out = Date.now(); s.outP = p; s.noteOut = $('vNote').value.trim(); saveDay(day);
-      var moved = km(s.inP, p);
+      s.out = Date.now(); s.noteOut = $('vNote').value.trim(); saveDay(day);
       var text = '🔴 مغادرة بروموتر — زيارة ' + day.stops.length + '\n' +
         'البروموتر: ' + pr.name + '\n' +
         'الموقع: ' + s.place + '\n' +
         'المنطقة: ' + s.area + ' — ' + s.city + '\n' +
         'وصول: ' + fmtClock(s.inT) + ' · مغادرة: ' + fmtClock(s.out) + '\n' +
         'مدة الزيارة: ' + fmtDur(s.out - s.inT) + '\n' +
-        (moved > 0.3 ? '⚠️ موقع المغادرة يبعد ' + moved.toFixed(1) + ' كم عن موقع الوصول\n' : '') +
         (salesOf(s).length ? '🧾 الأجهزة المباعة: ' + salesOf(s).length + '\n' + salesText(salesOf(s)) : '🧾 الأجهزة المباعة: 0\n') +
-        (s.noteOut ? 'ملاحظة: ' + s.noteOut + '\n' : '') + accLine(p) +
-        '📍 ' + maps(p);
+        (s.noteOut ? 'ملاحظة: ' + s.noteOut : '');
       $('vNote').value = '';
       render(); status('تم تسجيل المغادرة. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
       send(text);
@@ -345,9 +314,9 @@ select { background-position: 13px center, 18px center !important; padding-left:
   });
 
   function totals() {
-    var t = 0, d = 0, prev = null;
-    day.stops.forEach(function (s) { t += (s.out || Date.now()) - s.inT; if (prev) d += km(prev.outP || prev.inP, s.inP); prev = s; });
-    return { time: t, km: d };
+    var t = 0;
+    day.stops.forEach(function (s) { t += (s.out || Date.now()) - s.inT; });
+    return { time: t };
   }
 
   $('reportBtn').addEventListener('click', function () {
@@ -356,13 +325,13 @@ select { background-position: 13px center, 18px center !important; padding-left:
     if (!day.stops.length) { status('ما عندك زيارات اليوم حتى ترسل تقرير.', 'error'); return; }
     var T = totals();
     var lines = day.stops.map(function (s, i) {
-      return (i + 1) + ') ' + s.place + ' — ' + s.area + '\n   ' + fmtClock(s.inT) + ' ← ' + (s.out ? fmtClock(s.out) + ' (' + fmtDur(s.out - s.inT) + ')' : 'ما سجل مغادرة') + (salesOf(s).length ? ' · 🧾 ' + salesOf(s).length + ' مباع' : '') + '\n   📍 ' + maps(s.inP);
+      return (i + 1) + ') ' + s.place + ' — ' + s.area + '\n   ' + fmtClock(s.inT) + ' ← ' + (s.out ? fmtClock(s.out) + ' (' + fmtDur(s.out - s.inT) + ')' : 'ما سجل مغادرة') + (salesOf(s).length ? ' · 🧾 ' + salesOf(s).length + ' مباع' : '');
     }).join('\n');
     var text = '📋 تقرير زيارات البروموتر\n' +
       'البروموتر: ' + pr.name + '\n' +
       'المدينة: ' + pr.city + '\n' +
       'التاريخ: ' + fmtDate(Date.now()) + '\n' +
-      'عدد الزيارات: ' + day.stops.length + ' · الوقت بالمواقع: ' + fmtDur(T.time) + ' · المسافة: ~' + T.km.toFixed(1) + ' كم\n' +
+      'عدد الزيارات: ' + day.stops.length + ' · الوقت بالمحلات: ' + fmtDur(T.time) + '\n' +
       'أول وصول: ' + fmtClock(day.stops[0].inT) + ' · آخر تسجيل: ' + fmtClock(day.stops[day.stops.length - 1].out || day.stops[day.stops.length - 1].inT) + '\n\n' + lines +
       '\n\n🧾 الأجهزة المباعة اليوم: ' + allSales().length + '\n' + salesText(allSales());
     send(text);
@@ -483,13 +452,13 @@ select { background-position: 13px center, 18px center !important; padding-left:
       upd(); clearInterval(tick); tick = setInterval(upd, 30000);
     } else clearInterval(tick);
     var T = totals();
-    $('stStops').textContent = day.stops.length; $('stTime').textContent = fmtDur(T.time); $('stKm').textContent = T.km.toFixed(1);
+    $('stStops').textContent = day.stops.length; $('stTime').textContent = fmtDur(T.time);
     if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p>'; return; }
     $('stopList').innerHTML = day.stops.map(function (x, i) {
-      var open = !x.out, far = x.out && km(x.inP, x.outP) > 0.3;
+      var open = !x.out;
       return '<div class="stop"><div class="n' + (open ? ' open' : '') + '">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' +
         fmtClock(x.inT) + ' ← ' + (open ? '<b style="color:var(--gold)">الآن</b>' : fmtClock(x.out) + ' · ' + fmtDur(x.out - x.inT)) +
-        (salesOf(x).length ? '<br>🧾 ' + salesOf(x).length + ' جهاز مباع' : '') + (far ? '<br><span class="warn">⚠️ المغادرة من مكان بعيد عن الوصول</span>' : '') + '</div></div><a href="' + maps(x.inP) + '" target="_blank" rel="noopener">الخريطة ↗</a></div>';
+        (salesOf(x).length ? '<br>🧾 ' + salesOf(x).length + ' جهاز مباع' : '') + '</div></div><span></span></div>';
     }).join('');
   }
   render();
