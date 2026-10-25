@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#122238">
+<meta name="theme-color" content="#0085D0">
 <title>زيارات البروموتر</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -11,16 +11,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap">
 <style>
 :root {
-  --bg: #f6f1e4;
+  --bg: #eaf4fb;
   --surface: #ffffff;
-  --surface-2: #faf7ee;
-  --fg: #1c1207;
-  --muted: #6b5b3a;
-  --border: rgba(28,18,7,0.12);
-  --navy: #122238;
-  --navy-2: #1c3a5c;
-  --gold: #a8791f;
-  --gold-soft: rgba(168,121,31,0.14);
+  --surface-2: #f4f9fd;
+  --fg: #0d1b2a;
+  --muted: #4b6276;
+  --border: rgba(13,27,42,0.12);
+  --navy: #0085D0;
+  --navy-2: #006aa8;
+  --gold: #0098DA;
+  --gold-soft: rgba(0,152,218,0.12);
   --whatsapp: #22a559;
   --danger: #b3261e;
   --danger-soft: rgba(179,38,30,0.1);
@@ -29,18 +29,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #15120b; --surface: #211b10; --surface-2: #272013; --fg: #f3ecd9;
-    --muted: #c9b98f; --border: rgba(243,236,217,0.14); --navy: #0c1726;
-    --navy-2: #16314e; --gold: #e0b45a; --gold-soft: rgba(224,180,90,0.16);
+    --bg: #0b1620; --surface: #122230; --surface-2: #172b3c; --fg: #e6f1f8;
+    --muted: #9bb6c9; --border: rgba(230,241,248,0.14); --navy: #0a78bd;
+    --navy-2: #3aa6e4; --gold: #4cc3f5; --gold-soft: rgba(76,195,245,0.16);
     --whatsapp: #35c276; --danger: #ff8178; --danger-soft: rgba(255,129,120,0.14);
     --success-soft: rgba(53,194,118,0.14);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #15120b; --surface: #211b10; --surface-2: #272013; --fg: #f3ecd9;
-  --muted: #c9b98f; --border: rgba(243,236,217,0.14); --navy: #0c1726;
-  --navy-2: #16314e; --gold: #e0b45a; --gold-soft: rgba(224,180,90,0.16);
+  --bg: #0b1620; --surface: #122230; --surface-2: #172b3c; --fg: #e6f1f8;
+  --muted: #9bb6c9; --border: rgba(230,241,248,0.14); --navy: #0a78bd;
+  --navy-2: #3aa6e4; --gold: #4cc3f5; --gold-soft: rgba(76,195,245,0.16);
   --whatsapp: #35c276; --danger: #ff8178; --danger-soft: rgba(255,129,120,0.14);
   --success-soft: rgba(53,194,118,0.14);
   color-scheme: dark;
@@ -48,6 +48,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
+  position: relative;
   background: var(--bg); color: var(--fg);
   font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
   padding-inline: 16px; padding-block: 20px 40px;
@@ -59,7 +60,7 @@ h1 { font-size: 22px; font-weight: 900; margin: 0 0 4px; text-wrap: balance; }
 .sub { font-size: 14px; color: var(--muted); margin: 0 0 20px; line-height: 1.6; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
 .card h2 { font-size: 15px; font-weight: 800; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
-.step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #f3ecd9; font-size: 12px; font-weight: 800; flex: none; }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #ffffff; font-size: 12px; font-weight: 800; flex: none; }
 label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin: 0 0 6px; }
 .field { margin-bottom: 14px; }
 .field:last-child { margin-bottom: 0; }
@@ -73,7 +74,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 800; border: none; border-radius: 12px; padding: 15px 16px; cursor: pointer; transition: transform .08s ease, opacity .15s ease; }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-.btn-primary { background: var(--navy); color: #f3ecd9; }
+.btn-primary { background: var(--navy); color: #ffffff; }
 .btn-whatsapp { background: var(--whatsapp); color: #ffffff; }
 .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -93,7 +94,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .note { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); }
 .install-banner { display: none; align-items: center; gap: 10px; background: var(--gold-soft); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 13.5px; }
 .install-banner.show { display: flex; }
-.install-banner button { margin-inline-start: auto; background: var(--navy); color: #f3ecd9; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; flex: none; }
+.install-banner button { margin-inline-start: auto; background: var(--navy); color: #ffffff; border: none; border-radius: 8px; padding: 8px 14px; font-weight: 800; font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; flex: none; }
 .btn-gold { background: var(--gold); color: #fff; }
 .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -111,7 +112,7 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .stat span { font-size: 11.5px; color: var(--muted); }
 .stop { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); align-items: start; }
 .stop:first-child { border-top: none; }
-.stop .n { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #f3ecd9; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.stop .n { width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #ffffff; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 .stop .n.open { background: var(--gold); }
 .stop .pl { font-weight: 700; font-size: 14px; }
 .stop .meta { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.6; }
@@ -122,7 +123,7 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .sale-box h3 { font-family: 'Cairo', sans-serif; font-size: 14.5px; font-weight: 800; margin: 0 0 10px; }
 .imei-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
 .imei-row input { font-variant-numeric: tabular-nums; letter-spacing: .04em; direction: ltr; text-align: left; }
-.btn-sm { font-family: 'Cairo', sans-serif; font-size: 13.5px; font-weight: 800; border: none; border-radius: 10px; padding: 0 14px; cursor: pointer; background: var(--navy); color: #f3ecd9; }
+.btn-sm { font-family: 'Cairo', sans-serif; font-size: 13.5px; font-weight: 800; border: none; border-radius: 10px; padding: 0 14px; cursor: pointer; background: var(--navy); color: #ffffff; }
 .sale-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 13.5px; }
 .sale-item:first-child { border-top: none; }
 .sale-item code { font-variant-numeric: tabular-nums; direction: ltr; font-size: 13px; color: var(--muted); }
@@ -135,52 +136,60 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .scan-line::after { content: ''; position: absolute; left: 8%; right: 8%; top: 50%; height: 2px; background: #ff5a3c; box-shadow: 0 0 8px #ff5a3c; }
 select { background-position: 13px center, 18px center !important; padding-left: 34px !important; }
 .hidden { display: none !important; }
+.lang-btn { position: absolute; top: 0; inset-inline-end: 0; z-index: 2; background: var(--surface); color: var(--navy); border: 1.5px solid var(--navy); border-radius: 999px; padding: 6px 14px; font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lang-btn { color: var(--fg); border-color: var(--fg); } }
+.top { position: relative; padding-inline-end: 84px; }
+[dir="ltr"] select { background-position: calc(100% - 18px) center, calc(100% - 13px) center !important; padding-left: 12px !important; padding-right: 34px !important; }
+[dir="ltr"] body { font-family: 'Segoe UI', Roboto, Tahoma, sans-serif; }
 </style>
 </head>
 <body>
 
 <div class="install-banner" id="installBanner">
-  <span>📲 ثبّت هذا التطبيق على شاشتك الرئيسية لفتحه بضغطة وحدة.</span>
-  <button id="installBtn" type="button">تثبيت</button>
+  <span data-i18n="install">📲 ثبّت هذا التطبيق على شاشتك الرئيسية لفتحه بضغطة وحدة.</span>
+  <button id="installBtn" type="button" data-i18n="installBtn">تثبيت</button>
 </div>
 
-<p class="eyebrow">شركة الميدان · فريق بروموتر ZTE</p>
-<h1>تسجيل زيارات البروموتر</h1>
-<p class="sub">سجّل كل زيارة لمحل: اسم المحل والأجهزة المباعة. التطبيق يرسلها لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
+<div class="top">
+<button class="lang-btn" id="langBtn" type="button" aria-label="Language">EN</button>
+<p class="eyebrow" data-i18n="eyebrow">شركة الميدان · فريق بروموتر ZTE</p>
+<h1 data-i18n="h1">تسجيل زيارات البروموتر</h1>
+</div>
+<p class="sub" data-i18n="sub">سجّل كل زيارة لمحل: اسم المحل والأجهزة المباعة. التطبيق يرسلها لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
 
 <div class="card">
-  <h2><span class="step-num">1</span> بياناتك</h2>
+  <h2><span class="step-num">1</span> <span data-i18n="s1">بياناتك</span></h2>
   <div class="field">
-    <label for="pName">اسمك</label>
-    <input type="text" id="pName" placeholder="مثال: محمد علي" autocomplete="off">
+    <label for="pName" data-i18n="name">اسمك</label>
+    <input type="text" id="pName" data-i18n-ph="namePh" placeholder="مثال: محمد علي" autocomplete="off">
   </div>
   <div class="row2">
     <div class="field">
-      <label for="pCity">المدينة</label>
-      <input type="text" id="pCity" list="cities" placeholder="مثال: بغداد" autocomplete="off">
+      <label for="pCity" data-i18n="city">المدينة</label>
+      <input type="text" id="pCity" list="cities" data-i18n-ph="cityPh" placeholder="مثال: بغداد" autocomplete="off">
       <datalist id="cities"></datalist>
     </div>
     <div class="field">
-      <label for="pArea">المنطقة</label>
-      <input type="text" id="pArea" placeholder="مثال: الكرادة" autocomplete="off">
+      <label for="pArea" data-i18n="area">المنطقة</label>
+      <input type="text" id="pArea" data-i18n-ph="areaPh" placeholder="مثال: الكرادة" autocomplete="off">
     </div>
   </div>
-  <p class="note" style="margin-top:4px;padding-top:10px;">بياناتك تنحفظ بجهازك، فما تحتاج تكتبها كل مرة. تگدر تبدّل المنطقة إذا رحت لمنطقة ثانية.</p>
+  <p class="note" style="margin-top:4px;padding-top:10px;" data-i18n="note1">بياناتك تنحفظ بجهازك، فما تحتاج تكتبها كل مرة. تگدر تبدّل المنطقة إذا رحت لمنطقة ثانية.</p>
 </div>
 
 <div class="card">
-  <h2><span class="step-num">2</span> تسجيل زيارة</h2>
+  <h2><span class="step-num">2</span> <span data-i18n="s2">تسجيل زيارة</span></h2>
   <div id="arriveFields">
     <div class="field">
-      <label for="vPlace">اسم المحل</label>
-      <input type="text" id="vPlace" placeholder="مثال: محلات النور للموبايل" autocomplete="off">
+      <label for="vPlace" data-i18n="shop">اسم المحل</label>
+      <input type="text" id="vPlace" data-i18n-ph="shopPh" placeholder="مثال: محلات النور للموبايل" autocomplete="off">
     </div>
   </div>
   <div class="sale-box show" id="saleBox" style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--border);margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border);">
-    <h3>🧾 أجهزة ZTE المباعة بهذي الزيارة</h3>
+    <h3 data-i18n="soldH">🧾 أجهزة ZTE المباعة بهذي الزيارة</h3>
     <select id="sBrand" class="hidden" aria-hidden="true"></select>
     <div class="field">
-      <label for="sModel">الموديل</label>
+      <label for="sModel" data-i18n="model">الموديل</label>
       <select id="sModel"></select>
     </div>
     <div class="field hidden" id="sOtherWrap">
@@ -188,42 +197,97 @@ select { background-position: 13px center, 18px center !important; padding-left:
       <input type="text" id="sOther" placeholder="مثال: C61 128+4" autocomplete="off">
     </div>
     <div class="field">
-      <label for="sImei">IMEI (15 رقم)</label>
+      <label for="sImei" data-i18n="imei">IMEI (15 رقم)</label>
       <div class="imei-row">
         <input type="text" id="sImei" inputmode="numeric" maxlength="15" placeholder="35xxxxxxxxxxxxx" autocomplete="off">
-        <button class="btn-sm" id="scanBtn" type="button">📷 مسح</button>
+        <button class="btn-sm" id="scanBtn" type="button" data-i18n="scan">📷 مسح</button>
       </div>
     </div>
-    <button class="btn btn-outline" id="addSaleBtn" type="button" style="padding:12px;font-size:15px;">+ إضافة الجهاز</button>
+    <button class="btn btn-outline" id="addSaleBtn" type="button" style="padding:12px;font-size:15px;" data-i18n="add">+ إضافة الجهاز</button>
     <div id="saleList" style="margin-top:10px;"></div>
   </div>
   <div class="field">
-    <label for="vNote">ملاحظة (اختياري)</label>
-    <textarea id="vNote" placeholder="مثال: رتبت العرض، ركبت بوستر C62، المحل يطلب 10 أجهزة"></textarea>
+    <label for="vNote" data-i18n="noteL">ملاحظة (اختياري)</label>
+    <textarea id="vNote" data-i18n-ph="notePh" placeholder="مثال: رتبت العرض، ركبت بوستر C62، المحل يطلب 10 أجهزة"></textarea>
   </div>
-  <button class="btn btn-whatsapp" id="sendBtn" type="button"><span aria-hidden="true">💬</span><span>إرسال الزيارة عبر واتساب</span></button>
+  <button class="btn btn-whatsapp" id="sendBtn" type="button"><span aria-hidden="true">💬</span><span data-i18n="send">إرسال الزيارة عبر واتساب</span></button>
   <div class="status" id="statusBox"></div>
 </div>
 
 <div class="card">
-  <h2><span class="step-num">3</span> زيارات اليوم</h2>
+  <h2><span class="step-num">3</span> <span data-i18n="s3">زيارات اليوم</span></h2>
   <div class="stats">
-    <div class="stat"><b id="stStops">0</b><span>زيارة</span></div>
-    <div class="stat"><b id="stSold">0</b><span>جهاز مباع</span></div>
+    <div class="stat"><b id="stStops">0</b><span data-i18n="stVisits">زيارة</span></div>
+    <div class="stat"><b id="stSold">0</b><span data-i18n="stSold">جهاز مباع</span></div>
   </div>
   <div id="stopList"><p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p></div>
-  <button class="btn btn-whatsapp" id="reportBtn" type="button" style="margin-top:12px;"><span aria-hidden="true">💬</span><span>إرسال تقرير اليوم عبر واتساب</span></button>
-  <p class="note">السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.</p>
+  <button class="btn btn-whatsapp" id="reportBtn" type="button" style="margin-top:12px;"><span aria-hidden="true">💬</span><span data-i18n="report">إرسال تقرير اليوم عبر واتساب</span></button>
+  <p class="note" data-i18n="note2">السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.</p>
 </div>
 
-<div class="scan-wrap" id="scanWrap"><div class="scan-line" id="scanLine"><video id="scanVideo" playsinline muted></video></div><div id="scanReader" style="width:100%;max-width:480px;display:none;border-radius:14px;overflow:hidden;background:#000;"></div><p id="scanMsg">وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز</p><button class="btn btn-gold" id="scanClose" type="button" style="max-width:480px;">إلغاء</button></div>
+<div class="scan-wrap" id="scanWrap"><div class="scan-line" id="scanLine"><video id="scanVideo" playsinline muted></video></div><div id="scanReader" style="width:100%;max-width:480px;display:none;border-radius:14px;overflow:hidden;background:#000;"></div><p id="scanMsg" data-i18n="scanMsg">وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز</p><button class="btn btn-gold" id="scanClose" type="button" style="max-width:480px;" data-i18n="cancel">إلغاء</button></div>
 
 <script>
 (function () {
   var MANAGER_PHONE = "9647735350223";   // رقم مسؤول المتابعة — 964 بدون + وبدون صفر
   var CITIES = ["بغداد","البصرة","نينوى - الموصل","أربيل","النجف","كربلاء","بابل - الحلة","كركوك","السليمانية","دهوك","الأنبار - الرمادي","ديالى - بعقوبة","صلاح الدين - تكريت","واسط - الكوت","ذي قار - الناصرية","ميسان - العمارة","المثنى - السماوة","القادسية - الديوانية","حلبجة"];
   var $ = function (id) { return document.getElementById(id); };
-  CITIES.forEach(function (c) { var o = document.createElement('option'); o.value = c; $('cities').appendChild(o); });
+
+  var L = {
+    ar: {
+      title:'زيارات البروموتر', install:'📲 ثبّت هذا التطبيق على شاشتك الرئيسية لفتحه بضغطة وحدة.', installBtn:'تثبيت',
+      installIOS:'📲 للآيفون: اكبس زر المشاركة ⬆️ بـ Safari، وبعدها «إضافة إلى الشاشة الرئيسية».', ok:'تمام',
+      eyebrow:'شركة الميدان · فريق بروموتر ZTE', h1:'تسجيل زيارات البروموتر',
+      sub:'سجّل كل زيارة لمحل: اسم المحل والأجهزة المباعة. التطبيق يرسلها لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.',
+      s1:'بياناتك', s2:'تسجيل زيارة', s3:'زيارات اليوم', name:'اسمك', namePh:'مثال: محمد علي', city:'المدينة', cityPh:'مثال: بغداد', area:'المنطقة', areaPh:'مثال: الكرادة',
+      note1:'بياناتك تنحفظ بجهازك، فما تحتاج تكتبها كل مرة. تگدر تبدّل المنطقة إذا رحت لمنطقة ثانية.',
+      shop:'اسم المحل', shopPh:'مثال: محلات النور للموبايل', soldH:'🧾 أجهزة ZTE المباعة بهذي الزيارة', model:'الموديل', pick:'اختر الموديل',
+      imei:'IMEI (15 رقم)', scan:'📷 مسح', add:'+ إضافة الجهاز', noteL:'ملاحظة (اختياري)', notePh:'مثال: رتبت العرض، ركبت بوستر، المحل يطلب 10 أجهزة',
+      send:'إرسال الزيارة عبر واتساب', stVisits:'زيارة', stSold:'جهاز مباع', empty:'ما سجلت أي زيارة اليوم بعد.', soldN:'جهاز مباع',
+      report:'إرسال تقرير اليوم عبر واتساب', note2:'السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.',
+      scanMsg:'وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز', cancel:'إلغاء', del:'حذف',
+      eProfile:'عبّي اسمك والمدينة والمنطقة أول.', eShop:'اكتب اسم المحل.', okSent:'تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.',
+      eNoVisits:'ما عندك زيارات اليوم حتى ترسل تقرير.', eModel:'اختر موديل الجهاز.', eImeiLen:'الـ IMEI لازم يكون 15 رقم بالضبط.',
+      eImeiBad:'هذا الـ IMEI مو صحيح (رقم غلط). تأكد منه أو امسحه بالكاميرا.', eImeiDup:'هذا الـ IMEI مسجل قبل من هذا الجهاز. ما ينحسب مرتين.',
+      okAdd:'تمت إضافة {x}. ينرسل ويا الزيارة وبتقرير اليوم.', okScan:'تم مسح الـ IMEI: {x}. تأكد من الموديل واكبس إضافة.',
+      eCam:'ما كدرنا نفتح الكاميرا. اسمح بصلاحية الكاميرا من إعدادات الموبايل، أو اكتب الـ IMEI بإيدك.', eLib:'ما كدرنا نحمّل الماسح. تگدر تكتب الـ IMEI بإيدك.',
+      eNoCam:'هذا المتصفح ما يسمح بالكاميرا. افتح الرابط من Safari بالآيفون أو Chrome بالأندرويد، أو اكتب الـ IMEI بإيدك.', am:'ص', pm:'م', other:'EN'
+    },
+    en: {
+      title:'Promoter Visits', install:'📲 Install this app on your home screen to open it with one tap.', installBtn:'Install',
+      installIOS:'📲 iPhone: tap Share ⬆️ in Safari, then “Add to Home Screen”.', ok:'OK',
+      eyebrow:'Al-Maidan · ZTE Promoter Team', h1:'Promoter Visit Log',
+      sub:'Log every shop visit: the shop name and the devices sold. The app sends it to your supervisor on WhatsApp, and at the end of the day it sends a report of all visits.',
+      s1:'Your details', s2:'Log a visit', s3:'Today’s visits', name:'Your name', namePh:'e.g. Mohammed Ali', city:'City', cityPh:'e.g. Baghdad', area:'Area', areaPh:'e.g. Karrada',
+      note1:'Your details are saved on this phone, so you don’t need to type them every time. Change the area when you move to another one.',
+      shop:'Shop name', shopPh:'e.g. Al-Noor Mobile', soldH:'🧾 ZTE devices sold on this visit', model:'Model', pick:'Choose a model',
+      imei:'IMEI (15 digits)', scan:'📷 Scan', add:'+ Add device', noteL:'Note (optional)', notePh:'e.g. set up the display, put up a poster, shop wants 10 units',
+      send:'Send visit on WhatsApp', stVisits:'visits', stSold:'devices sold', empty:'No visits logged today yet.', soldN:'devices sold',
+      report:'Send today’s report on WhatsApp', note2:'The log is kept on this phone for today only and starts fresh each day. The official record is the WhatsApp messages your supervisor receives.',
+      scanMsg:'Point the camera at the IMEI barcode on the device box', cancel:'Cancel', del:'Delete',
+      eProfile:'Fill in your name, city and area first.', eShop:'Enter the shop name.', okSent:'Visit logged. WhatsApp is open — tap Send there.',
+      eNoVisits:'You have no visits today to report.', eModel:'Choose the device model.', eImeiLen:'The IMEI must be exactly 15 digits.',
+      eImeiBad:'This IMEI is not valid. Check it or scan it with the camera.', eImeiDup:'This IMEI was already logged on this phone. It can’t count twice.',
+      okAdd:'Added {x}. It will be sent with the visit and in today’s report.', okScan:'IMEI scanned: {x}. Check the model and tap Add.',
+      eCam:'Couldn’t open the camera. Allow camera access in your phone settings, or type the IMEI.', eLib:'Couldn’t load the scanner. You can type the IMEI.',
+      eNoCam:'This browser doesn’t allow the camera. Open the link in Safari (iPhone) or Chrome (Android), or type the IMEI.', am:'AM', pm:'PM', other:'عربي'
+    }
+  };
+  var CITIES_EN = ["Baghdad","Basra","Nineveh - Mosul","Erbil","Najaf","Karbala","Babil - Hillah","Kirkuk","Sulaymaniyah","Duhok","Anbar - Ramadi","Diyala - Baqubah","Salah al-Din - Tikrit","Wasit - Kut","Dhi Qar - Nasiriyah","Maysan - Amarah","Muthanna - Samawah","Qadisiyah - Diwaniyah","Halabja"];
+  var lang = (function () { try { return localStorage.getItem('midan_promo_lang') || 'ar'; } catch (e) { return 'ar'; } })();
+  if (!L[lang]) lang = 'ar';
+  function T(k, x) { var v = (L[lang][k] || L.ar[k] || k); return x !== undefined ? v.replace('{x}', x) : v; }
+  function applyLang() {
+    document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.title = T('title');
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = T(el.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function (el) { el.placeholder = T(el.getAttribute('data-i18n-ph')); });
+    document.getElementById('langBtn').textContent = T('other');
+    var dl = document.getElementById('cities'); dl.innerHTML = '';
+    (lang === 'ar' ? CITIES : CITIES_EN).forEach(function (c) { var o = document.createElement('option'); o.value = c; dl.appendChild(o); });
+  }
+  applyLang();
+  $('langBtn').addEventListener('click', function () { lang = lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('midan_promo_lang', lang); } catch (e) {} applyLang(); fillModels($('sModel').value); render(); clearStatus(); });
 
   function sGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function sSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -242,6 +306,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function fmtClock(t) { var d = new Date(t), h = d.getHours(), ap = h >= 12 ? 'م' : 'ص', h12 = h % 12 || 12; return h12 + ':' + pad(d.getMinutes()) + ' ' + ap; }
+  function uiClock(t) { var d = new Date(t), h = d.getHours(), h12 = h % 12 || 12; return h12 + ':' + pad(d.getMinutes()) + ' ' + (h >= 12 ? T('pm') : T('am')); }
   function fmtDate(t) { var d = new Date(t), days = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']; return days[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); }
   function fmtDur(ms) { var m = Math.max(0, Math.round(ms / 60000)); if (m < 60) return m + 'د'; return Math.floor(m / 60) + 'س ' + pad(m % 60) + 'د'; }
   function esc(s) { return String(s || '').replace(/[&<>"']/g, function (c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
@@ -254,7 +319,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
   function profileOk() {
     var n = $('pName').value.trim(), c = $('pCity').value.trim(), a = $('pArea').value.trim();
-    if (!n || !c || !a) { status('عبّي اسمك والمدينة والمنطقة أول.', 'error'); return null; }
+    if (!n || !c || !a) { status(T('eProfile'), 'error'); return null; }
     sSet('midan_promo_pName', n); sSet('midan_promo_pCity', c); sSet('midan_promo_pArea', a);
     return { name: n, city: c, area: a };
   }
@@ -265,7 +330,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
     clearStatus();
     var pr = profileOk(); if (!pr) return;
     var place = $('vPlace').value.trim();
-    if (!place) { status('اكتب اسم المحل.', 'error'); return; }
+    if (!place) { status(T('eShop'), 'error'); return; }
     var stop = { place: place, city: pr.city, area: pr.area, t: Date.now(), sales: draft.sales.slice(), note: $('vNote').value.trim() };
     day.stops.push(stop); saveDay(day);
     var text = '🧾 زيارة بروموتر — زيارة ' + day.stops.length + '\n' +
@@ -277,14 +342,14 @@ select { background-position: 13px center, 18px center !important; padding-left:
       (stop.note ? 'ملاحظة: ' + stop.note : '');
     draft = { date: todayKey(), sales: [] }; saveDraft();
     $('vPlace').value = ''; $('vNote').value = '';
-    render(); status('تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.', 'ok');
+    render(); status(T('okSent'), 'ok');
     send(text);
   });
 
   $('reportBtn').addEventListener('click', function () {
     clearStatus();
     var pr = profileOk(); if (!pr) return;
-    if (!day.stops.length) { status('ما عندك زيارات اليوم حتى ترسل تقرير.', 'error'); return; }
+    if (!day.stops.length) { status(T('eNoVisits'), 'error'); return; }
     var lines = day.stops.map(function (s, i) {
       return (i + 1) + ') ' + s.place + ' — ' + s.area + ' · ' + fmtClock(tOf(s)) + ' · 🧾 ' + salesOf(s).length + ' مباع';
     }).join('\n');
@@ -307,7 +372,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   Object.keys(BRANDS).forEach(function (b) { var o = document.createElement('option'); o.textContent = b; $('sBrand').appendChild(o); });
   function fillModels(keep) {
     var b = $('sBrand').value, list = (BRANDS[b] || []), sel = $('sModel');
-    sel.innerHTML = '<option value="">اختر الموديل</option>' + list.map(function (m) { return '<option>' + m + '</option>'; }).join('');
+    sel.innerHTML = '<option value="">' + T('pick') + '</option>' + list.map(function (m) { return '<option>' + m + '</option>'; }).join('');
     if (keep && list.indexOf(keep) >= 0) sel.value = keep;
     if (!BRANDS[b]) sel.value = OTHER;
     $('sOtherWrap').classList.toggle('hidden', sel.value !== OTHER);
@@ -331,16 +396,16 @@ select { background-position: 13px center, 18px center !important; padding-left:
     clearStatus();
     var st = draft;
     var br = $('sBrand').value, m = $('sModel').value, im = $('sImei').value.trim();
-    if (!m) { status('اختر موديل الجهاز.', 'error'); return; }
+    if (!m) { status(T('eModel'), 'error'); return; }
     if (m === OTHER) { m = $('sOther').value.trim(); if (!m) { status('اكتب اسم الموديل.', 'error'); return; } }
     if (br === 'براند ثاني') br = '';
-    if (!/^\d{15}$/.test(im)) { status('الـ IMEI لازم يكون 15 رقم بالضبط.', 'error'); return; }
-    if (!luhn(im)) { status('هذا الـ IMEI مو صحيح (رقم غلط). تأكد منه أو امسحه بالكاميرا.', 'error'); return; }
-    if (allImeis().indexOf(im) >= 0) { status('هذا الـ IMEI مسجل قبل من هذا الجهاز. ما ينحسب مرتين.', 'error'); return; }
+    if (!/^\d{15}$/.test(im)) { status(T('eImeiLen'), 'error'); return; }
+    if (!luhn(im)) { status(T('eImeiBad'), 'error'); return; }
+    if (allImeis().indexOf(im) >= 0) { status(T('eImeiDup'), 'error'); return; }
     st.sales = salesOf(st); st.sales.push({ brand: br, model: m, imei: im, t: Date.now() }); saveDraft();
     var ims = allImeis(); ims.push(im); sSetJSON('midan_promo_imeis', ims.slice(-2000));
     sSet('midan_promo_model', $('sModel').value); $('sImei').value = ''; $('sOther').value = '';
-    render(); status('تمت إضافة ' + (br ? br + ' ' : '') + m + ' — ' + im + '. ينرسل ويا الزيارة وبتقرير اليوم.', 'ok');
+    render(); status(T('okAdd', (br ? br + ' ' : '') + m + ' — ' + im), 'ok');
   });
   window.__delSale = function (i) {
     var st = draft; if (!st.sales[i]) return;
@@ -351,7 +416,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   var scanStream = null, scanTimer = null, libScanner = null;
   function found(code) {
     var m = String(code || '').match(/\d{15}/g) || [];
-    for (var j = 0; j < m.length; j++) if (luhn(m[j])) { $('sImei').value = m[j]; stopScan(); status('تم مسح الـ IMEI: ' + m[j] + '. تأكد من الموديل واكبس إضافة.', 'ok'); return true; }
+    for (var j = 0; j < m.length; j++) if (luhn(m[j])) { $('sImei').value = m[j]; stopScan(); status(T('okScan', m[j]), 'ok'); return true; }
     return false;
   }
   function stopScan() {
@@ -370,11 +435,11 @@ select { background-position: 13px center, 18px center !important; padding-left:
       }, 300);
     }).catch(camErr);
   }
-  function camErr() { stopScan(); status('ما كدرنا نفتح الكاميرا. اسمح بصلاحية الكاميرا من إعدادات الموبايل، أو اكتب الـ IMEI بإيدك.', 'error'); }
+  function camErr() { stopScan(); status(T('eCam'), 'error'); }
   function loadLib(cb) {
     if (window.Html5Qrcode) return cb();
     var sc = document.createElement('script'); sc.src = 'html5-qrcode.min.js';
-    sc.onload = cb; sc.onerror = function () { status('ما كدرنا نحمّل الماسح. تگدر تكتب الـ IMEI بإيدك.', 'error'); };
+    sc.onload = cb; sc.onerror = function () { status(T('eLib'), 'error'); };
     document.head.appendChild(sc);
   }
   function libScan() {
@@ -390,19 +455,19 @@ select { background-position: 13px center, 18px center !important; padding-left:
   }
   $('scanBtn').addEventListener('click', function () {
     clearStatus();
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { status('هذا المتصفح ما يسمح بالكاميرا. افتح الرابط من Safari بالآيفون أو Chrome بالأندرويد، أو اكتب الـ IMEI بإيدك.', 'error'); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { status(T('eNoCam'), 'error'); return; }
     if ('BarcodeDetector' in window) nativeScan(); else libScan();
   });
 
   function render() {
     var cur = draft.sales;
-    $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + esc((x.brand ? x.brand + ' ' : '') + x.model) + '</b><br><code>' + x.imei + '</code></span><button type="button" aria-label="حذف" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
+    $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + esc((x.brand ? x.brand + ' ' : '') + x.model) + '</b><br><code>' + x.imei + '</code></span><button type="button" aria-label="' + T('del') + '" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
     $('stSold').textContent = allSales().length;
     $('stStops').textContent = day.stops.length;
-    if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p>'; return; }
+    if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">' + T('empty') + '</p>'; return; }
     $('stopList').innerHTML = day.stops.map(function (x, i) {
-      return '<div class="stop"><div class="n">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' + fmtClock(tOf(x)) +
-        '<br>🧾 ' + salesOf(x).length + ' جهاز مباع</div></div><span></span></div>';
+      return '<div class="stop"><div class="n">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' + uiClock(tOf(x)) +
+        '<br>🧾 ' + salesOf(x).length + ' ' + T('soldN') + '</div></div><span></span></div>';
     }).join('');
   }
   render();
@@ -410,8 +475,8 @@ select { background-position: 13px center, 18px center !important; padding-left:
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
   if (isIOS && !standalone) {
-    $('installBanner').querySelector('span').textContent = '📲 للآيفون: اكبس زر المشاركة ⬆️ بـ Safari، وبعدها «إضافة إلى الشاشة الرئيسية».';
-    $('installBtn').textContent = 'تمام'; $('installBanner').classList.add('show');
+    var sp = $('installBanner').querySelector('span'); sp.setAttribute('data-i18n', 'installIOS'); sp.textContent = T('installIOS');
+    $('installBtn').setAttribute('data-i18n', 'ok'); $('installBtn').textContent = T('ok'); $('installBanner').classList.add('show');
   }
   var deferred = null;
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; $('installBanner').classList.add('show'); });
