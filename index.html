@@ -144,7 +144,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   <button id="installBtn" type="button">تثبيت</button>
 </div>
 
-<p class="eyebrow">شركة الميدان · فريق البروموتر</p>
+<p class="eyebrow">شركة الميدان · فريق بروموتر ZTE</p>
 <h1>تسجيل زيارات البروموتر</h1>
 <p class="sub">سجّل كل زيارة لمحل: اسم المحل والأجهزة المباعة. التطبيق يرسلها لمسؤول المتابعة عبر واتساب، وبآخر اليوم يرسل تقرير بكل الزيارات.</p>
 
@@ -177,16 +177,11 @@ select { background-position: 13px center, 18px center !important; padding-left:
     </div>
   </div>
   <div class="sale-box show" id="saleBox" style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--border);margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border);">
-    <h3>🧾 الأجهزة المباعة بهذي الزيارة (Oukitel · Infinix · ZTE)</h3>
-    <div class="row2">
-      <div class="field">
-        <label for="sBrand">البراند</label>
-        <select id="sBrand"></select>
-      </div>
-      <div class="field">
-        <label for="sModel">الموديل</label>
-        <select id="sModel"></select>
-      </div>
+    <h3>🧾 أجهزة ZTE المباعة بهذي الزيارة</h3>
+    <select id="sBrand" class="hidden" aria-hidden="true"></select>
+    <div class="field">
+      <label for="sModel">الموديل</label>
+      <select id="sModel"></select>
     </div>
     <div class="field hidden" id="sOtherWrap">
       <label for="sOther">اكتب الموديل</label>
@@ -307,13 +302,11 @@ select { background-position: 13px center, 18px center !important; padding-left:
   // ---------- sold devices (model + IMEI) ----------
   var OTHER = 'موديل ثاني';
   var BRANDS = {
-    'Oukitel': ["C62 128+4","C26 128+4","C26 128+6","C17 128+4","C59 Pro 256+8","C68 128+4","C68 Plus 128+4","C68 Plus 512+8","P1 Pro 512+8","Action 15 256+6","A5 Pro 256+3"],
-    'Infinix': ["Smart 10 64+3","Smart 10 128+4","Smart 10 Plus 128+8","Smart 20 64+4","Smart 20 128+4","Smart 20 256+4","Hot 60 Pro 256+8","Hot 60 Pro+ 256+8","Hot 70 256+4","Note 60 256+8","Note 60 Pro 5G 256+8","Note 60 Pro 5G 256+12","Note 60 Pro 5G Box 256+12","Note 60 Ultra 5G 512+12","Note Edge 5G 256+8","GT 50 Pro 256+12","GT 50 Pro 512+12","XPAD GT 256+8"],
-    'ZTE': ["Nubia A35E 64+2","Nubia A36 64+2","Nubia Neo5 Max 256+8","Nubia Neo5 GT 256+12","Nubia Neo5 GT 512+12"]
+    'ZTE': ["NUBIA A35E 64+2","NUBIA A36 64+2","NUBIA A57 128+4","NUBIA NEO5 GT 256+12","NUBIA NEO5 GT 512+12","NUBIA NEO5 MAX 256+8"]
   };
-  Object.keys(BRANDS).concat(['براند ثاني']).forEach(function (b) { var o = document.createElement('option'); o.textContent = b; $('sBrand').appendChild(o); });
+  Object.keys(BRANDS).forEach(function (b) { var o = document.createElement('option'); o.textContent = b; $('sBrand').appendChild(o); });
   function fillModels(keep) {
-    var b = $('sBrand').value, list = (BRANDS[b] || []).concat([OTHER]), sel = $('sModel');
+    var b = $('sBrand').value, list = (BRANDS[b] || []), sel = $('sModel');
     sel.innerHTML = '<option value="">اختر الموديل</option>' + list.map(function (m) { return '<option>' + m + '</option>'; }).join('');
     if (keep && list.indexOf(keep) >= 0) sel.value = keep;
     if (!BRANDS[b]) sel.value = OTHER;
@@ -321,7 +314,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   }
   $('sBrand').addEventListener('change', function () { sSet('midan_promo_brand', this.value); fillModels(); });
   $('sModel').addEventListener('change', function () { $('sOtherWrap').classList.toggle('hidden', this.value !== OTHER); });
-  var lb = sGet('midan_promo_brand'); if (lb) $('sBrand').value = lb;
+  $('sBrand').value = 'ZTE';
   fillModels(sGet('midan_promo_model'));
   function luhn(n) { var s = 0; for (var i = 0; i < 15; i++) { var d = +n[14 - i]; if (i % 2) { d *= 2; if (d > 9) d -= 9; } s += d; } return s % 10 === 0; }
   function allImeis() { return sJSON('midan_promo_imeis', []); }
