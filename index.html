@@ -189,14 +189,6 @@ select { background-position: 13px center, 18px center !important; padding-left:
     <h3 data-i18n="soldH">🧾 أجهزة ZTE المباعة بهذي الزيارة</h3>
     <select id="sBrand" class="hidden" aria-hidden="true"></select>
     <div class="field">
-      <label for="sModel" data-i18n="model">الموديل</label>
-      <select id="sModel"></select>
-    </div>
-    <div class="field hidden" id="sOtherWrap">
-      <label for="sOther">اكتب الموديل</label>
-      <input type="text" id="sOther" placeholder="مثال: C61 128+4" autocomplete="off">
-    </div>
-    <div class="field">
       <label for="sImei" data-i18n="imei">IMEI (15 رقم)</label>
       <div class="imei-row">
         <input type="text" id="sImei" inputmode="numeric" maxlength="15" placeholder="35xxxxxxxxxxxxx" autocomplete="off">
@@ -287,7 +279,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
     (lang === 'ar' ? CITIES : CITIES_EN).forEach(function (c) { var o = document.createElement('option'); o.value = c; dl.appendChild(o); });
   }
   applyLang();
-  $('langBtn').addEventListener('click', function () { lang = lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('midan_promo_lang', lang); } catch (e) {} applyLang(); fillModels($('sModel').value); render(); clearStatus(); });
+  $('langBtn').addEventListener('click', function () { lang = lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('midan_promo_lang', lang); } catch (e) {} applyLang(); render(); clearStatus(); });
 
   function sGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function sSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -365,48 +357,28 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
 
   // ---------- sold devices (model + IMEI) ----------
-  var OTHER = 'موديل ثاني';
-  var BRANDS = {
-    'ZTE': ["NUBIA A35E 64+2","NUBIA A36 64+2","NUBIA A57 128+4","NUBIA NEO5 GT 256+12","NUBIA NEO5 GT 512+12","NUBIA NEO5 MAX 256+8"]
-  };
-  Object.keys(BRANDS).forEach(function (b) { var o = document.createElement('option'); o.textContent = b; $('sBrand').appendChild(o); });
-  function fillModels(keep) {
-    var b = $('sBrand').value, list = (BRANDS[b] || []), sel = $('sModel');
-    sel.innerHTML = '<option value="">' + T('pick') + '</option>' + list.map(function (m) { return '<option>' + m + '</option>'; }).join('');
-    if (keep && list.indexOf(keep) >= 0) sel.value = keep;
-    if (!BRANDS[b]) sel.value = OTHER;
-    $('sOtherWrap').classList.toggle('hidden', sel.value !== OTHER);
-  }
-  $('sBrand').addEventListener('change', function () { sSet('midan_promo_brand', this.value); fillModels(); });
-  $('sModel').addEventListener('change', function () { $('sOtherWrap').classList.toggle('hidden', this.value !== OTHER); });
-  $('sBrand').value = 'ZTE';
-  fillModels(sGet('midan_promo_model'));
+  $('sBrand').innerHTML = '<option>ZTE</option>';
   function luhn(n) { var s = 0; for (var i = 0; i < 15; i++) { var d = +n[14 - i]; if (i % 2) { d *= 2; if (d > 9) d -= 9; } s += d; } return s % 10 === 0; }
   function allImeis() { return sJSON('midan_promo_imeis', []); }
   function salesOf(st) { return st && st.sales ? st.sales : []; }
   function allSales() { var a = []; day.stops.forEach(function (st) { a = a.concat(salesOf(st)); }); return a; }
   function salesText(list) {
     if (!list.length) return '';
-    var by = {}; list.forEach(function (x) { var k = (x.brand ? x.brand + ' ' : '') + x.model; by[k] = (by[k] || 0) + 1; });
-    return Object.keys(by).map(function (m) { return '• ' + m + ': ' + by[m]; }).join('\n') + '\n' +
-      list.map(function (x, i) { return (i + 1) + '. ' + (x.brand ? x.brand + ' ' : '') + x.model + ' — ' + x.imei; }).join('\n') + '\n';
+    return list.map(function (x, i) { return (i + 1) + '. ' + x.imei; }).join('\n') + '\n';
   }
   $('sImei').addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 15); });
-  $('addSaleBtn').addEventListener('click', function () {
+  function addImei(im) {
     clearStatus();
     var st = draft;
-    var br = $('sBrand').value, m = $('sModel').value, im = $('sImei').value.trim();
-    if (!m) { status(T('eModel'), 'error'); return; }
-    if (m === OTHER) { m = $('sOther').value.trim(); if (!m) { status('اكتب اسم الموديل.', 'error'); return; } }
-    if (br === 'براند ثاني') br = '';
-    if (!/^\d{15}$/.test(im)) { status(T('eImeiLen'), 'error'); return; }
-    if (!luhn(im)) { status(T('eImeiBad'), 'error'); return; }
-    if (allImeis().indexOf(im) >= 0) { status(T('eImeiDup'), 'error'); return; }
-    st.sales = salesOf(st); st.sales.push({ brand: br, model: m, imei: im, t: Date.now() }); saveDraft();
+    if (!/^\d{15}$/.test(im)) { status(T('eImeiLen'), 'error'); return false; }
+    if (!luhn(im)) { status(T('eImeiBad'), 'error'); return false; }
+    if (allImeis().indexOf(im) >= 0) { status(T('eImeiDup'), 'error'); return false; }
+    st.sales = salesOf(st); st.sales.push({ brand: 'ZTE', imei: im, t: Date.now() }); saveDraft();
     var ims = allImeis(); ims.push(im); sSetJSON('midan_promo_imeis', ims.slice(-2000));
-    sSet('midan_promo_model', $('sModel').value); $('sImei').value = ''; $('sOther').value = '';
-    render(); status(T('okAdd', (br ? br + ' ' : '') + m + ' — ' + im), 'ok');
-  });
+    $('sImei').value = '';
+    render(); status(T('okAdd', im), 'ok'); return true;
+  }
+  $('addSaleBtn').addEventListener('click', function () { addImei($('sImei').value.trim()); });
   window.__delSale = function (i) {
     var st = draft; if (!st.sales[i]) return;
     var im = st.sales[i].imei; st.sales.splice(i, 1); saveDraft();
@@ -416,7 +388,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
   var scanStream = null, scanTimer = null, libScanner = null;
   function found(code) {
     var m = String(code || '').match(/\d{15}/g) || [];
-    for (var j = 0; j < m.length; j++) if (luhn(m[j])) { $('sImei').value = m[j]; stopScan(); status(T('okScan', m[j]), 'ok'); return true; }
+    for (var j = 0; j < m.length; j++) if (luhn(m[j])) { stopScan(); addImei(m[j]); return true; }
     return false;
   }
   function stopScan() {
@@ -461,7 +433,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
 
   function render() {
     var cur = draft.sales;
-    $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + esc((x.brand ? x.brand + ' ' : '') + x.model) + '</b><br><code>' + x.imei + '</code></span><button type="button" aria-label="' + T('del') + '" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
+    $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + (i + 1) + '.</b> <code>' + x.imei + '</code></span><button type="button" aria-label="' + T('del') + '" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
     $('stSold').textContent = allSales().length;
     $('stStops').textContent = day.stops.length;
     if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">' + T('empty') + '</p>'; return; }
