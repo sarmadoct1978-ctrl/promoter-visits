@@ -273,7 +273,7 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       report:'إرسال تقرير اليوم عبر واتساب', note2:'القائمة تعرض زيارات اليوم. كل الزيارات تبقى محفوظة بجهازك حتى تطلع منها تقرير Excel. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.',
       s4:'تقرير Excel', rDay:'اليوم', rWeek:'هذا الأسبوع', rMonth:'هذا الشهر', from:'من تاريخ', to:'إلى تاريخ', excel:'تصدير تقرير Excel',
       note3:'الملف ينحفظ بمجلد التنزيلات (Downloads) بالموبايل، وتگدر تدزه واتساب من دكمة المشاركة. بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).',
-      rInfo:'بهذي الفترة: {x}', eRange:'اختر تاريخ البداية والنهاية، والبداية لازم تكون قبل النهاية.', eNoData:'ما أكو زيارات محفوظة بهذي الفترة.', okXls:'✅ انحفظ الملف بمجلد التنزيلات (Downloads) بالموبايل، تلگاه بتطبيق الملفات باسم: {x}', shareX:'دز ملف Excel لمسؤول المتابعة', sumX:'إرسال ملخص التقرير لنفس الرقم', shareHint:'بعد ما يفتح واتساب، اختار محادثة مسؤول المتابعة واكبس إرسال.',
+      rInfo:'بهذي الفترة: {x}', eRange:'اختر تاريخ البداية والنهاية، والبداية لازم تكون قبل النهاية.', eNoData:'ما أكو زيارات محفوظة بهذي الفترة.', okXls:'✅ انحفظ الملف بمجلد التنزيلات (Downloads) بالموبايل، تلگاه بتطبيق الملفات باسم: {x}', shareX:'دز ملف Excel لمسؤول المتابعة', sumX:'إرسال ملخص التقرير لنفس الرقم', shareHint:'بعد ما يفتح واتساب، اختار محادثة مسؤول المتابعة واكبس إرسال.', attachHow:'راح تنفتح محادثة مسؤول المتابعة بواتساب. اكبس 📎 ← مستند (Document) ← التنزيلات (Downloads)، واختار ملف التقرير واكبس إرسال.', attachMsg:'📎 تقرير Excel مرفق: {x}',
       scanMsg:'وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز', cancel:'إلغاء', del:'حذف',
       eProfile:'عبّي اسمك والمدينة والمنطقة أول.', eShop:'اكتب اسم المحل.', okSent:'تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.',
       eNoVisits:'ما عندك زيارات اليوم حتى ترسل تقرير.', eModel:'اختر موديل الجهاز.', eImeiLen:'الـ IMEI لازم يكون 15 رقم بالضبط.',
@@ -295,7 +295,7 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       report:'Send today’s report on WhatsApp', note2:'The list shows today’s visits. All visits stay saved on this phone so you can export them to Excel. The official record is the WhatsApp messages your supervisor receives.',
       s4:'Excel report', rDay:'Today', rWeek:'This week', rMonth:'This month', from:'From', to:'To', excel:'Export Excel report',
       note3:'The file is saved to the Downloads folder on this phone, and you can send it on WhatsApp with the share button. It has 3 sheets: daily summary, visits, and devices sold (IMEI).',
-      rInfo:'In this period: {x}', eRange:'Choose a start and end date; the start must be before the end.', eNoData:'No saved visits in this period.', okXls:'✅ Saved to the Downloads folder on this phone (Files app) as: {x}', shareX:'Send the Excel file to your supervisor', sumX:'Send the report summary to the same number', shareHint:'When WhatsApp opens, pick your supervisor’s chat and tap Send.',
+      rInfo:'In this period: {x}', eRange:'Choose a start and end date; the start must be before the end.', eNoData:'No saved visits in this period.', okXls:'✅ Saved to the Downloads folder on this phone (Files app) as: {x}', shareX:'Send the Excel file to your supervisor', sumX:'Send the report summary to the same number', shareHint:'When WhatsApp opens, pick your supervisor’s chat and tap Send.', attachHow:'Your supervisor’s WhatsApp chat will open. Tap 📎 → Document → Downloads, pick the report file and tap Send.', attachMsg:'📎 Excel report attached: {x}',
       scanMsg:'Point the camera at the IMEI barcode on the device box', cancel:'Cancel', del:'Delete',
       eProfile:'Fill in your name, city and area first.', eShop:'Enter the shop name.', okSent:'Visit logged. WhatsApp is open — tap Send there.',
       eNoVisits:'You have no visits today to report.', eModel:'Choose the device model.', eImeiLen:'The IMEI must be exactly 15 digits.',
@@ -513,9 +513,18 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
     sc.onload = cb; sc.onerror = function () { xStatus(T('eLib'), 'error'); };
     document.head.appendChild(sc);
   }
-  var lastFile = null, lastSummary = '';
+  var lastFile = null, lastSummary = '', lastName = '';
   $('sumXls').addEventListener('click', function () { if (lastSummary) send(lastSummary); });
-  $('shareXls').addEventListener('click', function () { if (lastFile) navigator.share({ files: [lastFile], title: lastFile.name }).catch(function () {}); });
+  function attachFallback() { // Android Chrome cannot share .xlsx files: open the supervisor chat and guide the promoter to attach the saved file
+    xStatus(T('attachHow'), 'ok');
+    setTimeout(function () { send(T('attachMsg', lastName)); }, 1200);
+  }
+  $('shareXls').addEventListener('click', function () {
+    if (!lastName) return;
+    if (lastFile && navigator.canShare && navigator.canShare({ files: [lastFile] })) {
+      navigator.share({ files: [lastFile], title: lastFile.name }).catch(function (e) { if (!e || e.name !== 'AbortError') attachFallback(); });
+    } else attachFallback();
+  });
   function dStr(t) { var d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear(); }
   function tStr(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
   $('excelBtn').addEventListener('click', function () {
@@ -549,7 +558,7 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
       lastFile = (file && navigator.canShare && navigator.canShare({ files: [file] })) ? file : null;
-      $('shareXls').classList.toggle('hidden', !lastFile); $('shareHint').classList.toggle('hidden', !lastFile);
+      lastName = fname; $('shareXls').classList.remove('hidden'); $('shareHint').classList.add('hidden');
       $('sumXls').classList.remove('hidden');
       lastSummary = '📊 تقرير بروموتر (Excel)\n' + 'البروموتر: ' + (sGet('midan_promo_pName') || '') + '\n' + 'الفترة: ' + dStr(parseYmd($('rFrom').value)) + ' — ' + dStr(parseYmd($('rTo').value)) + '\n' +
         'عدد الزيارات: ' + tv + '\n' + 'الأجهزة المباعة: ' + ts + '\n\n' + order.map(function (k) { return k + ': ' + byDay[k].n + ' زيارة · ' + byDay[k].s + ' جهاز'; }).join('\n') +
