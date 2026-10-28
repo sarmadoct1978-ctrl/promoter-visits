@@ -243,9 +243,12 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
     </div>
   </div>
   <button class="btn btn-excel" id="excelBtn" type="button"><span aria-hidden="true">📊</span><span data-i18n="excel">تصدير تقرير Excel</span></button>
+  <button class="btn btn-whatsapp hidden" id="shareXls" type="button" style="margin-top:10px;"><span aria-hidden="true">📤</span><span data-i18n="shareX">دز ملف Excel لمسؤول المتابعة</span></button>
+  <button class="btn btn-outline hidden" id="sumXls" type="button" style="margin-top:10px;"><span aria-hidden="true">💬</span><span data-i18n="sumX">إرسال ملخص التقرير لنفس الرقم</span></button>
+  <p class="range-info hidden" id="shareHint" data-i18n="shareHint">بعد ما يفتح واتساب، اختار محادثة مسؤول المتابعة واكبس إرسال.</p>
   <p class="range-info" id="rangeInfo"></p>
   <div class="status" id="excelStatus"></div>
-  <p class="note" data-i18n="note3">التقرير يطلع من الزيارات المحفوظة بهذا الموبايل. الملف بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).</p>
+  <p class="note" data-i18n="note3">الملف ينحفظ بمجلد التنزيلات (Downloads) بالموبايل، وتگدر تدزه واتساب من دكمة المشاركة. بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).</p>
 </div>
 
 <div class="scan-wrap" id="scanWrap"><div class="scan-line" id="scanLine"><video id="scanVideo" playsinline muted></video></div><div id="scanReader" style="width:100%;max-width:480px;display:none;border-radius:14px;overflow:hidden;background:#000;"></div><p id="scanMsg" data-i18n="scanMsg">وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز</p><button class="btn btn-gold" id="scanClose" type="button" style="max-width:480px;" data-i18n="cancel">إلغاء</button></div>
@@ -269,8 +272,8 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       send:'إرسال الزيارة عبر واتساب', stVisits:'زيارة', stSold:'جهاز مباع', empty:'ما سجلت أي زيارة اليوم بعد.', soldN:'جهاز مباع',
       report:'إرسال تقرير اليوم عبر واتساب', note2:'القائمة تعرض زيارات اليوم. كل الزيارات تبقى محفوظة بجهازك حتى تطلع منها تقرير Excel. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.',
       s4:'تقرير Excel', rDay:'اليوم', rWeek:'هذا الأسبوع', rMonth:'هذا الشهر', from:'من تاريخ', to:'إلى تاريخ', excel:'تصدير تقرير Excel',
-      note3:'التقرير يطلع من الزيارات المحفوظة بهذا الموبايل. الملف بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).',
-      rInfo:'بهذي الفترة: {x}', eRange:'اختر تاريخ البداية والنهاية، والبداية لازم تكون قبل النهاية.', eNoData:'ما أكو زيارات محفوظة بهذي الفترة.', okXls:'✅ تم تجهيز تقرير Excel: {x}',
+      note3:'الملف ينحفظ بمجلد التنزيلات (Downloads) بالموبايل، وتگدر تدزه واتساب من دكمة المشاركة. بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).',
+      rInfo:'بهذي الفترة: {x}', eRange:'اختر تاريخ البداية والنهاية، والبداية لازم تكون قبل النهاية.', eNoData:'ما أكو زيارات محفوظة بهذي الفترة.', okXls:'✅ انحفظ الملف بمجلد التنزيلات (Downloads) بالموبايل، تلگاه بتطبيق الملفات باسم: {x}', shareX:'دز ملف Excel لمسؤول المتابعة', sumX:'إرسال ملخص التقرير لنفس الرقم', shareHint:'بعد ما يفتح واتساب، اختار محادثة مسؤول المتابعة واكبس إرسال.',
       scanMsg:'وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز', cancel:'إلغاء', del:'حذف',
       eProfile:'عبّي اسمك والمدينة والمنطقة أول.', eShop:'اكتب اسم المحل.', okSent:'تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.',
       eNoVisits:'ما عندك زيارات اليوم حتى ترسل تقرير.', eModel:'اختر موديل الجهاز.', eImeiLen:'الـ IMEI لازم يكون 15 رقم بالضبط.',
@@ -291,8 +294,8 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       send:'Send visit on WhatsApp', stVisits:'visits', stSold:'devices sold', empty:'No visits logged today yet.', soldN:'devices sold',
       report:'Send today’s report on WhatsApp', note2:'The list shows today’s visits. All visits stay saved on this phone so you can export them to Excel. The official record is the WhatsApp messages your supervisor receives.',
       s4:'Excel report', rDay:'Today', rWeek:'This week', rMonth:'This month', from:'From', to:'To', excel:'Export Excel report',
-      note3:'The report uses the visits saved on this phone. The file has 3 sheets: daily summary, visits, and devices sold (IMEI).',
-      rInfo:'In this period: {x}', eRange:'Choose a start and end date; the start must be before the end.', eNoData:'No saved visits in this period.', okXls:'✅ Excel report ready: {x}',
+      note3:'The file is saved to the Downloads folder on this phone, and you can send it on WhatsApp with the share button. It has 3 sheets: daily summary, visits, and devices sold (IMEI).',
+      rInfo:'In this period: {x}', eRange:'Choose a start and end date; the start must be before the end.', eNoData:'No saved visits in this period.', okXls:'✅ Saved to the Downloads folder on this phone (Files app) as: {x}', shareX:'Send the Excel file to your supervisor', sumX:'Send the report summary to the same number', shareHint:'When WhatsApp opens, pick your supervisor’s chat and tap Send.',
       scanMsg:'Point the camera at the IMEI barcode on the device box', cancel:'Cancel', del:'Delete',
       eProfile:'Fill in your name, city and area first.', eShop:'Enter the shop name.', okSent:'Visit logged. WhatsApp is open — tap Send there.',
       eNoVisits:'You have no visits today to report.', eModel:'Choose the device model.', eImeiLen:'The IMEI must be exactly 15 digits.',
@@ -510,6 +513,9 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
     sc.onload = cb; sc.onerror = function () { xStatus(T('eLib'), 'error'); };
     document.head.appendChild(sc);
   }
+  var lastFile = null, lastSummary = '';
+  $('sumXls').addEventListener('click', function () { if (lastSummary) send(lastSummary); });
+  $('shareXls').addEventListener('click', function () { if (lastFile) navigator.share({ files: [lastFile], title: lastFile.name }).catch(function () {}); });
   function dStr(t) { var d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear(); }
   function tStr(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
   $('excelBtn').addEventListener('click', function () {
@@ -539,13 +545,16 @@ input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; 
       var out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       var blob = new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       var file = null; try { file = new File([blob], fname, { type: blob.type }); } catch (e) {}
-      if (file && navigator.canShare && navigator.canShare({ files: [file] }) && /android|iphone|ipad|ipod/i.test(navigator.userAgent + (navigator.maxTouchPoints > 1 ? ' ipad' : ''))) {
-        navigator.share({ files: [file], title: fname }).catch(function () {});
-      } else {
-        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click();
-        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-      }
-      xStatus(T('okXls', r.length + ' ' + T('stVisits') + ' · ' + (s3.length - 1) + ' ' + T('stSold')), 'ok');
+      // always save the file to the phone (Downloads), then offer sharing as a separate button
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+      lastFile = (file && navigator.canShare && navigator.canShare({ files: [file] })) ? file : null;
+      $('shareXls').classList.toggle('hidden', !lastFile); $('shareHint').classList.toggle('hidden', !lastFile);
+      $('sumXls').classList.remove('hidden');
+      lastSummary = '📊 تقرير بروموتر (Excel)\n' + 'البروموتر: ' + (sGet('midan_promo_pName') || '') + '\n' + 'الفترة: ' + dStr(parseYmd($('rFrom').value)) + ' — ' + dStr(parseYmd($('rTo').value)) + '\n' +
+        'عدد الزيارات: ' + tv + '\n' + 'الأجهزة المباعة: ' + ts + '\n\n' + order.map(function (k) { return k + ': ' + byDay[k].n + ' زيارة · ' + byDay[k].s + ' جهاز'; }).join('\n') +
+        '\n\n📎 ملف Excel: ' + fname;
+      xStatus(T('okXls', fname), 'ok');
     });
   });
 
