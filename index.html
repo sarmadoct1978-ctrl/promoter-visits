@@ -136,6 +136,14 @@ textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 .scan-line::after { content: ''; position: absolute; left: 8%; right: 8%; top: 50%; height: 2px; background: #ff5a3c; box-shadow: 0 0 8px #ff5a3c; }
 select { background-position: 13px center, 18px center !important; padding-left: 34px !important; }
 .hidden { display: none !important; }
+input[type="date"] { width: 100%; font-family: inherit; font-size: 15px; color: var(--fg); background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+input[type="date"]:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.chips { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.chip { flex: 1; font-family: 'Cairo', sans-serif; font-size: 13.5px; font-weight: 800; border: 1.5px solid var(--navy); color: var(--navy); background: transparent; border-radius: 999px; padding: 8px 10px; cursor: pointer; }
+.chip.on { background: var(--navy); color: #fff; }
+.btn-excel { background: #1d6f42; color: #fff; }
+.range-info { font-size: 13px; color: var(--muted); margin: 10px 0 0; text-align: center; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip { color: var(--fg); border-color: var(--fg); } :root:not([data-theme="light"]) .chip.on { background: var(--navy); border-color: var(--navy); color: #fff; } }
 .lang-btn { position: absolute; top: 0; inset-inline-end: 0; z-index: 2; background: var(--surface); color: var(--navy); border: 1.5px solid var(--navy); border-radius: 999px; padding: 6px 14px; font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 13px; cursor: pointer; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lang-btn { color: var(--fg); border-color: var(--fg); } }
 .top { position: relative; padding-inline-end: 84px; }
@@ -214,7 +222,30 @@ select { background-position: 13px center, 18px center !important; padding-left:
   </div>
   <div id="stopList"><p class="history-empty">ما سجلت أي زيارة اليوم بعد.</p></div>
   <button class="btn btn-whatsapp" id="reportBtn" type="button" style="margin-top:12px;"><span aria-hidden="true">💬</span><span data-i18n="report">إرسال تقرير اليوم عبر واتساب</span></button>
-  <p class="note" data-i18n="note2">السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.</p>
+  <p class="note" data-i18n="note2">القائمة تعرض زيارات اليوم. كل الزيارات تبقى محفوظة بجهازك حتى تطلع منها تقرير Excel. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.</p>
+</div>
+
+<div class="card">
+  <h2><span class="step-num">4</span> <span data-i18n="s4">تقرير Excel</span></h2>
+  <div class="chips">
+    <button class="chip" type="button" data-range="day" data-i18n="rDay">اليوم</button>
+    <button class="chip" type="button" data-range="week" data-i18n="rWeek">هذا الأسبوع</button>
+    <button class="chip" type="button" data-range="month" data-i18n="rMonth">هذا الشهر</button>
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="rFrom" data-i18n="from">من تاريخ</label>
+      <input type="date" id="rFrom">
+    </div>
+    <div class="field">
+      <label for="rTo" data-i18n="to">إلى تاريخ</label>
+      <input type="date" id="rTo">
+    </div>
+  </div>
+  <button class="btn btn-excel" id="excelBtn" type="button"><span aria-hidden="true">📊</span><span data-i18n="excel">تصدير تقرير Excel</span></button>
+  <p class="range-info" id="rangeInfo"></p>
+  <div class="status" id="excelStatus"></div>
+  <p class="note" data-i18n="note3">التقرير يطلع من الزيارات المحفوظة بهذا الموبايل. الملف بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).</p>
 </div>
 
 <div class="scan-wrap" id="scanWrap"><div class="scan-line" id="scanLine"><video id="scanVideo" playsinline muted></video></div><div id="scanReader" style="width:100%;max-width:480px;display:none;border-radius:14px;overflow:hidden;background:#000;"></div><p id="scanMsg" data-i18n="scanMsg">وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز</p><button class="btn btn-gold" id="scanClose" type="button" style="max-width:480px;" data-i18n="cancel">إلغاء</button></div>
@@ -236,7 +267,10 @@ select { background-position: 13px center, 18px center !important; padding-left:
       shop:'اسم المحل', shopPh:'مثال: محلات النور للموبايل', soldH:'🧾 أجهزة ZTE المباعة بهذي الزيارة', model:'الموديل', pick:'اختر الموديل',
       imei:'IMEI (15 رقم)', scan:'📷 مسح', add:'+ إضافة الجهاز', noteL:'ملاحظة (اختياري)', notePh:'مثال: رتبت العرض، ركبت بوستر، المحل يطلب 10 أجهزة',
       send:'إرسال الزيارة عبر واتساب', stVisits:'زيارة', stSold:'جهاز مباع', empty:'ما سجلت أي زيارة اليوم بعد.', soldN:'جهاز مباع',
-      report:'إرسال تقرير اليوم عبر واتساب', note2:'السجل محفوظ بجهازك لليوم الحالي فقط، ويبدي من جديد كل يوم. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.',
+      report:'إرسال تقرير اليوم عبر واتساب', note2:'القائمة تعرض زيارات اليوم. كل الزيارات تبقى محفوظة بجهازك حتى تطلع منها تقرير Excel. السجل الرسمي هو رسائل الواتساب عند مسؤول المتابعة.',
+      s4:'تقرير Excel', rDay:'اليوم', rWeek:'هذا الأسبوع', rMonth:'هذا الشهر', from:'من تاريخ', to:'إلى تاريخ', excel:'تصدير تقرير Excel',
+      note3:'التقرير يطلع من الزيارات المحفوظة بهذا الموبايل. الملف بيه 3 صفحات: الملخص اليومي، الزيارات، والأجهزة المباعة (IMEI).',
+      rInfo:'بهذي الفترة: {x}', eRange:'اختر تاريخ البداية والنهاية، والبداية لازم تكون قبل النهاية.', eNoData:'ما أكو زيارات محفوظة بهذي الفترة.', okXls:'✅ تم تجهيز تقرير Excel: {x}',
       scanMsg:'وجّه الكاميرا على باركود الـ IMEI بكرتونة الجهاز', cancel:'إلغاء', del:'حذف',
       eProfile:'عبّي اسمك والمدينة والمنطقة أول.', eShop:'اكتب اسم المحل.', okSent:'تم تسجيل الزيارة. فتحنا واتساب، اضغط إرسال هناك.',
       eNoVisits:'ما عندك زيارات اليوم حتى ترسل تقرير.', eModel:'اختر موديل الجهاز.', eImeiLen:'الـ IMEI لازم يكون 15 رقم بالضبط.',
@@ -255,7 +289,10 @@ select { background-position: 13px center, 18px center !important; padding-left:
       shop:'Shop name', shopPh:'e.g. Al-Noor Mobile', soldH:'🧾 ZTE devices sold on this visit', model:'Model', pick:'Choose a model',
       imei:'IMEI (15 digits)', scan:'📷 Scan', add:'+ Add device', noteL:'Note (optional)', notePh:'e.g. set up the display, put up a poster, shop wants 10 units',
       send:'Send visit on WhatsApp', stVisits:'visits', stSold:'devices sold', empty:'No visits logged today yet.', soldN:'devices sold',
-      report:'Send today’s report on WhatsApp', note2:'The log is kept on this phone for today only and starts fresh each day. The official record is the WhatsApp messages your supervisor receives.',
+      report:'Send today’s report on WhatsApp', note2:'The list shows today’s visits. All visits stay saved on this phone so you can export them to Excel. The official record is the WhatsApp messages your supervisor receives.',
+      s4:'Excel report', rDay:'Today', rWeek:'This week', rMonth:'This month', from:'From', to:'To', excel:'Export Excel report',
+      note3:'The report uses the visits saved on this phone. The file has 3 sheets: daily summary, visits, and devices sold (IMEI).',
+      rInfo:'In this period: {x}', eRange:'Choose a start and end date; the start must be before the end.', eNoData:'No saved visits in this period.', okXls:'✅ Excel report ready: {x}',
       scanMsg:'Point the camera at the IMEI barcode on the device box', cancel:'Cancel', del:'Delete',
       eProfile:'Fill in your name, city and area first.', eShop:'Enter the shop name.', okSent:'Visit logged. WhatsApp is open — tap Send there.',
       eNoVisits:'You have no visits today to report.', eModel:'Choose the device model.', eImeiLen:'The IMEI must be exactly 15 digits.',
@@ -295,6 +332,15 @@ select { background-position: 13px center, 18px center !important; padding-left:
   function loadDay() { var d = sJSON('midan_promo_day', null); if (!d || d.date !== todayKey()) d = { date: todayKey(), stops: [] }; return d; }
   function saveDay(d) { sSetJSON('midan_promo_day', d); }
   var day = loadDay();
+  // full history of all visits (kept on this phone) for Excel reports
+  function loadHist() { return sJSON('midan_promo_hist', []); }
+  function saveHist(h) { sSetJSON('midan_promo_hist', h); }
+  (function migrate() { // copy today's visits into history once (visits logged before this version)
+    var h = loadHist(); if (sGet('midan_promo_hist_v')) return;
+    var name = sGet('midan_promo_pName') || '';
+    day.stops.forEach(function (s) { h.push({ t: s.t || s.inT, name: name, city: s.city || '', area: s.area || '', place: s.place, note: s.note || '', sales: (s.sales || []).map(function (x) { return x.imei; }) }); });
+    saveHist(h); sSet('midan_promo_hist_v', '1');
+  })();
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function fmtClock(t) { var d = new Date(t), h = d.getHours(), ap = h >= 12 ? 'م' : 'ص', h12 = h % 12 || 12; return h12 + ':' + pad(d.getMinutes()) + ' ' + ap; }
@@ -325,6 +371,7 @@ select { background-position: 13px center, 18px center !important; padding-left:
     if (!place) { status(T('eShop'), 'error'); return; }
     var stop = { place: place, city: pr.city, area: pr.area, t: Date.now(), sales: draft.sales.slice(), note: $('vNote').value.trim() };
     day.stops.push(stop); saveDay(day);
+    var h = loadHist(); h.push({ t: stop.t, name: pr.name, city: pr.city, area: pr.area, place: place, note: stop.note, sales: stop.sales.map(function (x) { return x.imei; }) }); saveHist(h);
     var text = '🧾 زيارة بروموتر — زيارة ' + day.stops.length + '\n' +
       'البروموتر: ' + pr.name + '\n' +
       'المحل: ' + place + '\n' +
@@ -431,11 +478,83 @@ select { background-position: 13px center, 18px center !important; padding-left:
     if ('BarcodeDetector' in window) nativeScan(); else libScan();
   });
 
+  // ---------- Excel report ----------
+  function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function parseYmd(s) { var p = String(s || '').split('-'); return p.length === 3 ? new Date(+p[0], +p[1] - 1, +p[2]) : null; }
+  function setRange(kind) {
+    var now = new Date(), a = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (kind === 'week') { var back = (a.getDay() + 1) % 7; a.setDate(a.getDate() - back); } // week starts Saturday
+    if (kind === 'month') a = new Date(now.getFullYear(), now.getMonth(), 1);
+    $('rFrom').value = ymd(a); $('rTo').value = ymd(now);
+    document.querySelectorAll('.chip').forEach(function (c) { c.classList.toggle('on', c.getAttribute('data-range') === kind); });
+    rangeInfo();
+  }
+  function inRange() {
+    var f = parseYmd($('rFrom').value), to = parseYmd($('rTo').value);
+    if (!f || !to || f > to) return null;
+    var end = new Date(to.getFullYear(), to.getMonth(), to.getDate() + 1).getTime();
+    return loadHist().filter(function (v) { return v.t >= f.getTime() && v.t < end; }).sort(function (a, b) { return a.t - b.t; });
+  }
+  function rangeInfo() {
+    var r = inRange(); if (!r) { $('rangeInfo').textContent = ''; return; }
+    var n = 0; r.forEach(function (v) { n += v.sales.length; });
+    $('rangeInfo').textContent = T('rInfo', r.length + ' ' + T('stVisits') + ' · ' + n + ' ' + T('stSold'));
+  }
+  document.querySelectorAll('.chip').forEach(function (c) { c.addEventListener('click', function () { setRange(c.getAttribute('data-range')); }); });
+  ['rFrom', 'rTo'].forEach(function (id) { $(id).addEventListener('change', function () { document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); }); rangeInfo(); }); });
+  setRange('month');
+  function xStatus(msg, kind) { var b = $('excelStatus'); b.textContent = msg; b.className = 'status show ' + (kind === 'error' ? 'status-error' : 'status-ok'); }
+  function loadXlsx(cb) {
+    if (window.XLSX) return cb();
+    var sc = document.createElement('script'); sc.src = 'xlsx.mini.min.js';
+    sc.onload = cb; sc.onerror = function () { xStatus(T('eLib'), 'error'); };
+    document.head.appendChild(sc);
+  }
+  function dStr(t) { var d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear(); }
+  function tStr(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  $('excelBtn').addEventListener('click', function () {
+    $('excelStatus').className = 'status';
+    var r = inRange(); if (!r) { xStatus(T('eRange'), 'error'); return; }
+    if (!r.length) { xStatus(T('eNoData'), 'error'); return; }
+    loadXlsx(function () {
+      var ar = lang === 'ar';
+      var H1 = ar ? ['التاريخ', 'اليوم', 'عدد الزيارات', 'الأجهزة المباعة', 'أول زيارة', 'آخر زيارة'] : ['Date', 'Day', 'Visits', 'Devices sold', 'First visit', 'Last visit'];
+      var H2 = ar ? ['#', 'التاريخ', 'الوقت', 'البروموتر', 'المدينة', 'المنطقة', 'المحل', 'الأجهزة المباعة', 'ملاحظة'] : ['#', 'Date', 'Time', 'Promoter', 'City', 'Area', 'Shop', 'Devices sold', 'Note'];
+      var H3 = ar ? ['#', 'التاريخ', 'الوقت', 'البروموتر', 'المحل', 'IMEI'] : ['#', 'Date', 'Time', 'Promoter', 'Shop', 'IMEI'];
+      var daysAr = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'], daysEn = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var byDay = {}, order = [];
+      r.forEach(function (v) { var k = dStr(v.t); if (!byDay[k]) { byDay[k] = { t: v.t, n: 0, s: 0, first: v.t, last: v.t }; order.push(k); } var b = byDay[k]; b.n++; b.s += v.sales.length; b.last = v.t; });
+      var s1 = [H1], tv = 0, ts = 0;
+      order.forEach(function (k) { var b = byDay[k]; tv += b.n; ts += b.s; s1.push([k, (ar ? daysAr : daysEn)[new Date(b.t).getDay()], b.n, b.s, tStr(b.first), tStr(b.last)]); });
+      s1.push([ar ? 'المجموع' : 'Total', '', tv, ts, '', '']);
+      var s2 = [H2]; r.forEach(function (v, i) { s2.push([i + 1, dStr(v.t), tStr(v.t), v.name, v.city, v.area, v.place, v.sales.length, v.note]); });
+      var s3 = [H3], n = 0; r.forEach(function (v) { v.sales.forEach(function (im) { n++; s3.push([n, dStr(v.t), tStr(v.t), v.name, v.place, im]); }); });
+      var wb = XLSX.utils.book_new(); wb.Workbook = { Views: [{ RTL: ar }] };
+      function add(rows, name, cols) { var ws = XLSX.utils.aoa_to_sheet(rows); ws['!cols'] = cols.map(function (w) { return { wch: w }; }); XLSX.utils.book_append_sheet(wb, ws, name); }
+      add(s1, ar ? 'الملخص' : 'Summary', [12, 10, 12, 14, 10, 10]);
+      add(s2, ar ? 'الزيارات' : 'Visits', [5, 12, 8, 18, 16, 16, 26, 14, 36]);
+      add(s3, ar ? 'الأجهزة' : 'Devices', [5, 12, 8, 18, 26, 18]);
+      var who = (sGet('midan_promo_pName') || 'promoter').replace(/[\\/:*?"<>|]/g, '').trim().replace(/\s+/g, '_');
+      var fname = 'Promoter_Report_' + who + '_' + $('rFrom').value + '_to_' + $('rTo').value + '.xlsx';
+      var out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      var blob = new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      var file = null; try { file = new File([blob], fname, { type: blob.type }); } catch (e) {}
+      if (file && navigator.canShare && navigator.canShare({ files: [file] }) && /android|iphone|ipad|ipod/i.test(navigator.userAgent + (navigator.maxTouchPoints > 1 ? ' ipad' : ''))) {
+        navigator.share({ files: [file], title: fname }).catch(function () {});
+      } else {
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+      }
+      xStatus(T('okXls', r.length + ' ' + T('stVisits') + ' · ' + (s3.length - 1) + ' ' + T('stSold')), 'ok');
+    });
+  });
+
   function render() {
     var cur = draft.sales;
     $('saleList').innerHTML = cur.map(function (x, i) { return '<div class="sale-item"><span><b>' + (i + 1) + '.</b> <code>' + x.imei + '</code></span><button type="button" aria-label="' + T('del') + '" onclick="__delSale(' + i + ')">×</button></div>'; }).join('');
     $('stSold').textContent = allSales().length;
     $('stStops').textContent = day.stops.length;
+    if ($('rangeInfo')) rangeInfo();
     if (!day.stops.length) { $('stopList').innerHTML = '<p class="history-empty">' + T('empty') + '</p>'; return; }
     $('stopList').innerHTML = day.stops.map(function (x, i) {
       return '<div class="stop"><div class="n">' + (i + 1) + '</div><div><div class="pl">' + esc(x.place) + '</div><div class="meta">' + esc(x.area) + ' · ' + uiClock(tOf(x)) +
